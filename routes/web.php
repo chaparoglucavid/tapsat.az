@@ -1,0 +1,19 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\DashboardController;
+
+Route::get('/', function () {
+    notify()->success('Laravel Notify is awesome!');
+    return redirect()->route('showLoginForm');
+});
+
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('showLoginForm');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+Route::middleware('auth:web')->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
