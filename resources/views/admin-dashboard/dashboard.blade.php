@@ -11,9 +11,6 @@
                                 <p class="mb-4">
                                     {{ t_db('dashboard', 'please_keep_your_password_hidden_for_system_security') }}
                                 </p>
-
-                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">View
-                                    Badges</a>
                             </div>
                         </div>
                         <div class="col-sm-5 text-center text-sm-left">
@@ -62,7 +59,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="fw-semibold d-block mb-1">Profit</span>
+                                <span class="fw-semibold d-block mb-1">{{ t_db('dashboard', 'profit') }}</span>
                                 <h3 class="card-title mb-2">$12,628</h3>
                                 <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
                                     +72.80%</small>
@@ -93,13 +90,12 @@
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-end"
                                              aria-labelledby="cardOpt6">
-                                            <a class="dropdown-item" href="javascript:void(0);">View
-                                                More</a>
-                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                            <a class="dropdown-item" href="javascript:void(0);">{{ t_db('dashboard', 'view_more') }}</a>
+                                            <a class="dropdown-item" href="javascript:void(0);">{{ t_db('dashboard', 'delete') }}</a>
                                         </div>
                                     </div>
                                 </div>
-                                <span>Sales</span>
+                                <span class="fw-semibold d-block mb-1">{{ t_db('dashboard', 'expences') }}</span>
                                 <h3 class="card-title text-nowrap mb-1">$4,679</h3>
                                 <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
                                     +28.42%</small>
@@ -113,7 +109,7 @@
                 <div class="card">
                     <div class="row row-bordered g-0">
                         <div class="col-md-8">
-                            <h5 class="card-header m-0 me-2 pb-3">Total Revenue</h5>
+                            <h5 class="card-header m-0 me-2 pb-3">{{ t_db('dashboard', 'total_revenue') }}</h5>
                             <div id="totalRevenueChart" class="px-2"></div>
                         </div>
                         <div class="col-md-4">
@@ -193,13 +189,12 @@
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-end"
                                              aria-labelledby="cardOpt4">
-                                            <a class="dropdown-item" href="javascript:void(0);">View
-                                                More</a>
-                                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                            <a class="dropdown-item" href="javascript:void(0);">{{ t_db('dashboard', 'view_more') }}</a>
+                                            <a class="dropdown-item" href="javascript:void(0);">{{ t_db('dashboard', 'delete') }}</a>
                                         </div>
                                     </div>
                                 </div>
-                                <span class="d-block mb-1">Payments</span>
+                                <span class="d-block mb-1">{{ t_db('dashboard', 'payments') }}</span>
                                 <h3 class="card-title text-nowrap mb-2">$2,456</h3>
                                 <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i>
                                     -14.82%</small>
@@ -232,7 +227,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="fw-semibold d-block mb-1">Transactions</span>
+                                <span class="fw-semibold d-block mb-1">{{ t_db('dashboard', 'transactions')}}</span>
                                 <h3 class="card-title mb-2">$14,857</h3>
                                 <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i>
                                     +28.14%</small>
@@ -248,7 +243,7 @@
                                     <div
                                         class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
                                         <div class="card-title">
-                                            <h5 class="text-nowrap mb-2">Profile Report</h5>
+                                            <h5 class="text-nowrap mb-2">{{ t_db('dashboard', 'profile_report') }}</h5>
                                             <span
                                                 class="badge bg-label-warning rounded-pill">Year 2021</span>
                                         </div>
@@ -273,7 +268,7 @@
                 <div class="card h-100">
                     <div class="card-header d-flex align-items-center justify-content-between pb-0">
                         <div class="card-title mb-0">
-                            <h5 class="m-0 me-2">Order Statistics</h5>
+                            <h5 class="m-0 me-2">{{ t_db('dashboard', 'category_statistics') }}</h5>
                             <small class="text-muted">42.82k Total Sales</small>
                         </div>
                         <div class="dropdown">
