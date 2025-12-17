@@ -143,7 +143,7 @@
                     </div>
                     <div class="text-center">
                         <h4 class="mb-2">tapsat.az 👋</h4>
-                        <p class="mb-4">{{ t('auth.login_title') }}</p>
+                        <p class="mb-4">{{ t_db('auth', 'login_title', 'az') }}</p>
                     </div>
 
                     <div id="loginCountdown" class="login-countdown d-none">

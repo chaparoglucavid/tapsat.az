@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class Translations extends Model
+class Translation extends Model
 {
     use SoftDeletes;
 
@@ -21,13 +21,13 @@ class Translations extends Model
 
         static::creating(function ($model) {
             if (empty($model->uuid)) {
-                $model->uid = Str::uuid()->toString();
+                $model->uuid = Str::uuid()->toString();
             }
         });
     }
 
     public function language()
     {
-        return $this->belongsTo(Languages::class, 'locale', 'code');
+        return $this->belongsTo(Language::class, 'locale', 'code');
     }
 }

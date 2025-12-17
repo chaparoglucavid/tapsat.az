@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Languages;
+use App\Models\Language;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -14,14 +14,16 @@ class LanguagesSeeder extends Seeder
      */
     public function run(): void
     {
-        Languages::create(
+        Language::create(
             [
                 'uuid' => Str::uuid()->toString(),
                 'code' => 'az',
                 'name' => 'Azərbaycan dili',
                 'is_active' => true,
                 'is_default' => true
-            ],
+            ]);
+
+        Language::create(
             [
                 'uuid' => Str::uuid()->toString(),
                 'code' => 'en',

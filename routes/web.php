@@ -14,6 +14,7 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 Route::middleware('auth:web')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('change-language/{language}', [DashboardController::class, 'changeLanguage'])->name('change-language');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

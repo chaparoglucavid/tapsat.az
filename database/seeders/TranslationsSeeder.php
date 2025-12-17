@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Translations;
+use App\Models\Translation;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -14,21 +14,47 @@ class TranslationsSeeder extends Seeder
      */
     public function run(): void
     {
-        Translations::create(
+        $translations = [
             [
-                'uuid' => Str::uuid()->toString(),
-                'key' => 'login_title',
-                'locale' => 'az',
-                'group' => 'auth',
-                'value' => 'Sistemə daxil olun'
+                'key'    => 'login_title',
+                'group'  => 'auth',
+                'values' => [
+                    'az' => 'Sistemə daxil olun',
+                    'en' => 'Login to system',
+                ],
             ],
             [
-                'uuid' => Str::uuid()->toString(),
-                'key' => 'login_title',
-                'locale' => 'en',
-                'group' => 'auth',
-                'value' => 'Login to system'
-            ]
-        );
+                'key'    => 'dear',
+                'group'  => 'dashboard',
+                'values' => [
+                    'az' => 'Hörmətli',
+                    'en' => 'Dear',
+                ],
+            ],
+            [
+                'key'    => 'please_keep_your_password_hidden_for_system_security',
+                'group'  => 'dashboard',
+                'values' => [
+                    'az' => 'Sistemin təhlükəsizliyi üçün zəhmət olmasa şifrənizi gizli saxlayın',
+                    'en' => 'Please keep your password hidden for system security',
+                ],
+            ],
+        ];
+
+        foreach ($translations as $item) {
+            foreach ($item['values'] as $locale => $value) {
+                Translation::firstOrCreate([
+                    'key'    => $item['key'],
+                    'group'  => $item['group'],
+                    'value' => $value,
+                ],[
+                    'uuid'   => (string) Str::uuid(),
+                    'key'    => $item['key'],
+                    'group'  => $item['group'],
+                    'locale' => $locale,
+                    'value'  => $value,
+                ]);
+            }
+        }
     }
 }
