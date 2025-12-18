@@ -69,27 +69,27 @@
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
         <li class="menu-item active">
-            <a href="index.html" class="menu-link">
+            <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Əsas səhifə</div>
+                <div data-i18n="Analytics">{{ t_db('general', 'home') }}</div>
             </a>
         </li>
 
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Ünvanlar</div>
+                <div data-i18n="Layouts">{{ t_db('general', 'addresses') }}</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Şəhərlər</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'cities') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Rayonlar</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'districts') }}</div>
                     </a>
                 </li>
             </ul>
@@ -98,18 +98,18 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Hesablar</div>
+                <div data-i18n="Layouts">{{ t_db('general', 'accounts') }}</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">İstifadəçilər</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'users') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Mağazalar</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'stores') }}</div>
                     </a>
                 </li>
             </ul>
@@ -118,90 +118,23 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Elanlar</div>
+                <div data-i18n="Layouts">{{ t_db('general', 'announcements') }}</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Bütün Elanlar</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'all_announcements') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Rəylər</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'comments') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Şikayətlər</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="menu-item">
-            <a href="cards-basic.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div class="text-truncate" data-i18n="Basic">Elan paketləri</div>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Kateqoriyalar</div>
-            </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Bütün kateqoriyalar</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Kateqoriya atributları</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Bloq</div>
-            </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Bütün bloqlar</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Bloq kateqoriyaları</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Marketinq</div>
-            </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Təkliflər</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Bizi izləyənlər</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'complaints') }}</div>
                     </a>
                 </li>
             </ul>
@@ -210,25 +143,25 @@
         <li class="menu-item">
             <a href="cards-basic.html" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div class="text-truncate" data-i18n="Basic">Bildirişlər</div>
+                <div class="text-truncate" data-i18n="Basic">{{ t_db('general', 'packages') }}</div>
             </a>
         </li>
 
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Mesajlar</div>
+                <div data-i18n="Layouts">{{ t_db('general', 'categories') }}</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">İnformativ mesajlar</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'all_categories') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Texniki dəstək mesajları</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'category_attributes') }}</div>
                     </a>
                 </li>
             </ul>
@@ -237,33 +170,18 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Analitika və hesabatlar</div>
+                <div data-i18n="Layouts">{{ t_db('general', 'blog') }}</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Ümumi statistika</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'all_blogs') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">İstifadəçi analitikası</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Elan analitikası</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Gəlir hesabatları</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Aktivlik hesabatları</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'blog_categories') }}</div>
                     </a>
                 </li>
             </ul>
@@ -272,23 +190,45 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Təhlükəsizlik</div>
+                <div data-i18n="Layouts">{{ t_db('general', 'marketing') }}</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Giriş tarixçəsi</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'offers') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Şübhəli fəaliyyətlər</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'subscriptions') }}</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="menu-item">
+            <a href="cards-basic.html" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div class="text-truncate" data-i18n="Basic">{{ t_db('general', 'notifications') }}</div>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div data-i18n="Layouts">{{ t_db('general', 'messages') }}</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="layouts-without-menu.html" class="menu-link">
+                        <div data-i18n="Without menu">{{ t_db('general', 'informative_messages') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">İP İdarəetməsi</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'support_messages') }}</div>
                     </a>
                 </li>
             </ul>
@@ -297,23 +237,83 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Bildiriş şablonları</div>
+                <div data-i18n="Layouts">{{ t_db('general', 'analytics_and_reports') }}</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Push bildirişləri (APP)</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'general_statistics') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">SMS şablonları</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'user_analytics') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Email şablonları</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'announcement_analytics') }}</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="layouts-without-navbar.html" class="menu-link">
+                        <div data-i18n="Without navbar">{{ t_db('general', 'income_analytics') }}</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="layouts-without-navbar.html" class="menu-link">
+                        <div data-i18n="Without navbar">{{ t_db('general', 'activity_analytics') }}</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div data-i18n="Layouts">{{ t_db('general', 'security') }}</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="layouts-without-menu.html" class="menu-link">
+                        <div data-i18n="Without menu">{{ t_db('general', 'login_logs') }}</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="layouts-without-navbar.html" class="menu-link">
+                        <div data-i18n="Without navbar">{{ t_db('general', 'suspicious_activities') }}</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="layouts-without-navbar.html" class="menu-link">
+                        <div data-i18n="Without navbar">{{ t_db('general', 'ip_management') }}</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div data-i18n="Layouts">{{ t_db('general', 'notification_templates') }}</div>
+            </a>
+
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="layouts-without-menu.html" class="menu-link">
+                        <div data-i18n="Without menu">{{ t_db('general', 'push_notification_for_app') }}</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="layouts-without-navbar.html" class="menu-link">
+                        <div data-i18n="Without navbar">{{ t_db('general', 'sms_templates') }}</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="layouts-without-navbar.html" class="menu-link">
+                        <div data-i18n="Without navbar">{{ t_db('general', 'email_templates') }}</div>
                     </a>
                 </li>
             </ul>
@@ -323,35 +323,35 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Sistem</div>
+                <div data-i18n="Layouts">{{ t_db('general', 'system') }}</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Sistem statusu</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'system_status') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Cache idarəetməsi</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'cache_management') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Backup və bərpa</div>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Məlumat ixracı</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'backup_settings') }}</div>
                     </a>
                 </li>
 
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Cron job tənzimləmələri</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'Data export') }}</div>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="layouts-without-navbar.html" class="menu-link">
+                        <div data-i18n="Without navbar">{{ t_db('general', 'cron_job_configuration') }}</div>
                     </a>
                 </li>
             </ul>
@@ -360,53 +360,53 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Tənzimləmələr</div>
+                <div data-i18n="Layouts">{{ t_db('general', 'configurations') }}</div>
             </a>
 
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Reklam bannerləri</div>
+                        <div data-i18n="Without menu">{{ t_db('general', 'ad_banners') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Sistem istifadəçiləri</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'system_users') }}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Hesab tənzimləmələri</div>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Rollar və icazələr</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'account_settings') }}</div>
                     </a>
                 </li>
 
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Ödəniş metodları</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'roles_and_permissions') }}</div>
                     </a>
                 </li>
 
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">OTP tənzimləmələri</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'payment_methods') }}</div>
                     </a>
                 </li>
 
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Dil tənzimləmələri</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'OTP_configurations') }}</div>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="{{ route('languages.index') }}" class="menu-link">
+                        <div data-i18n="Without navbar">{{ t_db('general', 'language_configurations') }}</div>
                     </a>
                 </li>
 
                 <li class="menu-item">
                     <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Email tənzimləmələri</div>
+                        <div data-i18n="Without navbar">{{ t_db('general', 'email_configurations') }}</div>
                     </a>
                 </li>
             </ul>
