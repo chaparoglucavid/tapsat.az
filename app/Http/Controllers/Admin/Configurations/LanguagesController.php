@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Configurations;
 use App\Http\Controllers\Controller;
 use App\Models\Language;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LanguagesController extends Controller
 {
@@ -22,7 +23,7 @@ class LanguagesController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin-dashboard.configurations.languages.create');
     }
 
     /**
@@ -30,7 +31,44 @@ class LanguagesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'code'      => 'required|string|max:10|unique:languages,code',
+                'name'      => 'required|string|max:100',
+                'is_active' => 'required|integer',
+                'is_default'=> 'nullable'
+            ]);
+
+            DB::beginTransaction();
+
+            if ($request->has('is_default')) {
+                Language::where('is_default', true)->update([
+                    'is_default' => false
+                ]);
+            }
+
+            Language::create([
+                'code'       => $validated['code'],
+                'name'       => $validated['name'],
+                'is_active'  => $validated['is_active'],
+                'is_default' => $request->has('is_default')
+            ]);
+
+            DB::commit();
+
+            notify()->success(t_db('notification', 'language_added_successfully'));
+            return redirect()
+                ->route('languages.index');
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -38,7 +76,7 @@ class LanguagesController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**

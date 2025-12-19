@@ -138,11 +138,11 @@
                       </g>
                     </svg>
                   </span>
-                            <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
+                            <span class="app-brand-text demo text-body fw-bolder">tapsat.az</span>
                         </a>
                     </div>
                     <div class="text-center">
-                        <h4 class="mb-2">tapsat.az 👋</h4>
+                        <h4 class="mb-2">İdarəetmə paneli 👋</h4>
                         <p class="mb-4">{{ t_db('auth', 'login_title', 'az') }}</p>
                     </div>
 

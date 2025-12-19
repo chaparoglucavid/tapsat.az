@@ -11,7 +11,7 @@ class Language extends Model
     use SoftDeletes;
     protected $table = 'languages';
     protected $fillable = [
-        'uuid', 'code', 'name', 'is_active', 'is_default'
+        'uuid', 'code', 'name', 'image_path' ,'is_active', 'is_default'
     ];
 
     protected static function boot()

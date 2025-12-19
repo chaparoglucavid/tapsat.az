@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->uuid('uuid')->unique();
             $table->string('code', 10)->unique();
             $table->string('name', 50);
+            $table->string('iamge_path')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_default')->default(false);
             $table->softDeletes();

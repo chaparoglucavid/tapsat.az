@@ -38,14 +38,16 @@
                         </ul>
                     </div>
 
-                    <button class="btn btn-primary">
-                        <i class="bx bx-plus"></i> {{ t_db('general', 'add_new') }}
-                    </button>
+                    <a href="{{ route('languages.create') }}">
+                        <button class="btn btn-primary">
+                            <i class="bx bx-plus"></i> {{ t_db('general', 'add_new') }}
+                        </button>
+                    </a>
                 </div>
             </div>
 
             <div class="card-body">
-                <table id="modernTable" class="table align-middle">
+                <table id="languages" class="table align-middle">
                     <thead>
                     <tr>
                         <th>
@@ -73,7 +75,9 @@
                                     class="badge bg-label-{{ $lang->is_active ? 'success' : 'danger' }}">{{ $lang->is_active ? t_db('general', 'active') : t_db('general', 'inactive') }}</span>
                             </td>
                             <td>
-                                <span class="badge bg-label-primary">{{ t_db('general', 'current') }}</span>
+                                @if($lang->is_default)
+                                    <span class="badge bg-label-primary">{{ t_db('general', 'current') }}</span>
+                                @endif
                             </td>
                             <td class="d-flex align-items-center">
                                 <div class="d-inline-block"><a href="javascript:;"
@@ -91,13 +95,82 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <a href="javascript:;" class="btn btn-icon item-edit" title="{{t_db('general', 'translations')}}"><i class="icon-base bx bx-file icon-sm"></i></a>
-                                <a href="javascript:;" class="btn btn-icon item-edit" title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i></a>
+                                <a href="javascript:;" class="btn btn-icon item-edit"
+                                   title="{{t_db('general', 'translations')}}"><i
+                                        class="icon-base bx bx-file icon-sm"></i></a>
+                                <a href="javascript:;" class="btn btn-icon item-edit"
+                                   title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i></a>
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div
+            class="modal-onboarding modal fade animate__animated"
+            id="onboardHorizontalImageModal"
+            tabindex="-1"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content text-center">
+                    <div class="modal-header border-0">
+                        <a class="text-body-secondary close-label" href="javascript:void(0);" data-bs-dismiss="modal"
+                        >Skip Intro</a
+                        >
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body onboarding-horizontal p-0">
+                        <div class="onboarding-media">
+                            <img
+                                src="../../assets/img/illustrations/boy-verify-email-light.png"
+                                alt="boy-verify-email-light"
+                                width="273"
+                                class="img-fluid"
+                                data-app-light-img="illustrations/boy-verify-email-light.png"
+                                data-app-dark-img="illustrations/boy-verify-email-dark.png"/>
+                        </div>
+                        <div class="onboarding-content mb-0">
+                            <h4 class="onboarding-title text-body">Example Request Information</h4>
+                            <div class="onboarding-info">
+                                In this example you can see a form where you can request some additional information
+                                from the
+                                customer when they land on the app page.
+                            </div>
+                            <form>
+                                <div class="row g-6">
+                                    <div class="col-sm-6">
+                                        <div class="mb-4">
+                                            <label for="nameEx7" class="form-label">Your Full Name</label>
+                                            <input
+                                                class="form-control"
+                                                placeholder="Enter your full name..."
+                                                type="text"
+                                                value=""
+                                                tabindex="0"
+                                                id="nameEx7"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="mb-4">
+                                            <label for="roleEx7" class="form-label">Your Role</label>
+                                            <select class="form-select" tabindex="0" id="roleEx7">
+                                                <option>Web Developer</option>
+                                                <option>Business Owner</option>
+                                                <option>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -107,7 +180,7 @@
 @push('js-code')
     <script>
         $(function () {
-            let table = $('#modernTable').DataTable({
+            let table = $('#languages').DataTable({
                 pageLength: 10,
                 dom: 'rt<"d-flex justify-content-between mt-3"ip>',
                 ordering: false,

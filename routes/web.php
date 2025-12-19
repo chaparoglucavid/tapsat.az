@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\{
+    DashboardController,
+    UploadFileController
+};
 use App\Http\Controllers\Admin\Configurations\LanguagesController;
 
 Route::get('/', function () {
