@@ -9,13 +9,12 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Translation extends Model
+class City extends Model
 {
     use SoftDeletes, LogsActivity;
-
-    protected $table = 'translations';
+    protected $table = 'cities';
     protected $fillable = [
-        'uuid', 'key', 'locale', 'group','value'
+        'uuid', 'name', 'is_active'
     ];
 
     protected static function boot()
@@ -28,6 +27,14 @@ class Translation extends Model
             }
         });
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($model) {
+            $model->oldAttributes = $model->getAttributes();
+        });
+    }
+
     public function tapActivity(Activity $activity, string $eventName)
     {
         if ($eventName === 'deleted') {
@@ -40,16 +47,10 @@ class Translation extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['key', 'locale', 'group', 'value'])
+            ->logOnly(['name','status'])
             ->logOnlyDirty()
-            ->useLogName('translation')
-            ->setDescriptionForEvent(fn(string $event) => "Translation {$event}");
+            ->useLogName('city')
+            ->setDescriptionForEvent(fn(string $event) => "City {$event}");
     }
 
-
-
-    public function language()
-    {
-        return $this->belongsTo(Language::class, 'locale', 'code');
-    }
 }

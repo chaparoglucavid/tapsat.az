@@ -33,12 +33,12 @@ class LanguagesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-   public function store(Request $request)
+    public function store(Request $request)
     {
         $validated = $request->validate([
-            'code'       => 'required|string|max:10|unique:languages,code',
-            'name'       => 'required|string|max:100',
-            'is_active'  => 'required|boolean',
+            'code' => 'required|string|max:10|unique:languages,code',
+            'name' => 'required|string|max:100',
+            'is_active' => 'required|boolean',
             'is_default' => 'nullable|boolean',
         ]);
 
@@ -53,9 +53,9 @@ class LanguagesController extends Controller
             }
 
             $language = Language::create([
-                'code'       => $validated['code'],
-                'name'       => $validated['name'],
-                'is_active'  => $validated['is_active'],
+                'code' => $validated['code'],
+                'name' => $validated['name'],
+                'is_active' => $validated['is_active'],
                 'is_default' => $request->boolean('is_default'),
             ]);
 
@@ -67,13 +67,13 @@ class LanguagesController extends Controller
 
                 $insertData = $translations->map(function ($t) use ($language, $now) {
                     return [
-                        'uuid'        => Str::uuid(),
-                        'locale'      => $language->code,
-                        'group'       => $t->group,
-                        'key'         => $t->key,
-                        'value'       => $t->value,
-                        'created_at'  => $now,
-                        'updated_at'  => $now,
+                        'uuid' => Str::uuid(),
+                        'locale' => $language->code,
+                        'group' => $t->group,
+                        'key' => $t->key,
+                        'value' => $t->value,
+                        'created_at' => $now,
+                        'updated_at' => $now,
                     ];
                 })->toArray();
 
@@ -101,8 +101,7 @@ class LanguagesController extends Controller
     public function edit(string $uuid)
     {
         $language = Language::where('uuid', $uuid)->first();
-        if(!$language)
-        {
+        if (!$language) {
             notify(t_db('general', 'language_not_fount'), t_db('general', 'error'));
             return redirect()->back();
         }
@@ -119,16 +118,16 @@ class LanguagesController extends Controller
             $language = Language::where('uuid', $uuid)->firstOrFail();
 
             $validated = $request->validate([
-                'code'       => 'required|string|max:10|unique:languages,code,' . $language->id,
-                'name'       => 'required|string|max:100',
-                'is_active'  => 'required|boolean',
+                'code' => 'required|string|max:10|unique:languages,code,' . $language->id,
+                'name' => 'required|string|max:100',
+                'is_active' => 'required|boolean',
                 'is_default' => 'nullable',
             ]);
 
             DB::transaction(function () use ($validated, $request, $language) {
 
-                $oldCode     = $language->code;
-                $newCode     = $validated['code'];
+                $oldCode = $language->code;
+                $newCode = $validated['code'];
                 $makeDefault = $request->is_default === "on" ? true : false;
 
                 if ($makeDefault && !$language->is_default) {
@@ -138,9 +137,9 @@ class LanguagesController extends Controller
                 }
 
                 $language->update([
-                    'code'       => $newCode,
-                    'name'       => $validated['name'],
-                    'is_active'  => $validated['is_active'],
+                    'code' => $newCode,
+                    'name' => $validated['name'],
+                    'is_active' => $validated['is_active'],
                     'is_default' => $makeDefault,
                 ]);
 
@@ -169,9 +168,40 @@ class LanguagesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $uuid)
     {
-        //
+        try {
+            $language = Language::where('uuid', $uuid)->first();
+
+            if (!$language) {
+                return response()->json([
+                    'message' => t_db('general', 'language_not_found')
+                ], 404);
+            }
+
+            if ($language->is_default) {
+                return response()->json([
+                    'message' => t_db('general', 'default_language_cannot_be_deleted')
+                ], 422);
+            }
+
+            if (method_exists($language, 'translations')) {
+                $language->translations()->delete();
+            }
+
+            $language->delete();
+
+            return response()->json([
+                'message' => t_db('general', 'language_deleted_successfully')
+            ], 200);
+
+        } catch (\Exception $e) {
+            \Log::error('Language deletion failed: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => t_db('general', 'something_went_wrong')
+            ], 500);
+        }
     }
 
     /**

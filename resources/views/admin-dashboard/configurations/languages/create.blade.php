@@ -24,7 +24,7 @@
                                 <div class="col-md-6">
                                     <label for="defaultFormControlInput"
                                            class="form-label">{{ t_db('general', 'language_code') }}</label>
-                                    <input type="text" name="code" value="{{ old('code') }}" class="form-control" id="defaultFormControlInput"
+                                    <input type="text" required name="code" value="{{ old('code') }}" class="form-control" id="defaultFormControlInput"
                                            placeholder="{{ t_db('general', 'add_language_code') }}"
                                            aria-describedby="defaultFormControlHelp"/>
                                 </div>
@@ -32,7 +32,7 @@
                                 <div class="col-md-6">
                                     <label for="defaultFormControlInput"
                                            class="form-label">{{ t_db('general', 'language_name') }}</label>
-                                    <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="defaultFormControlInput"
+                                    <input type="text" required name="name" value="{{ old('name') }}" class="form-control" id="defaultFormControlInput"
                                            placeholder="{{ t_db('general', 'add_language_name') }}"
                                            aria-describedby="defaultFormControlHelp"/>
                                 </div>
@@ -41,7 +41,7 @@
                                     <label for="defaultFormControlInput"
                                            class="form-label">{{ t_db('general', 'status') }}</label>
                                     <select class="form-select" name="is_active" id="exampleFormControlSelect1" aria-label="Default select example">
-                                        <option selected disabled>{{ t_db('general', 'select_status') }}</option>
+                                        <option disabled >{{ t_db('general', 'select_status') }}</option>
                                         <option value="1" {{ old('is_active') === 1 ? 'selected' : '' }}>{{ t_db('general', 'active') }}</option>
                                         <option value="0" {{ old('is_active') === 0 ? 'selected' : '' }}>{{ t_db('general', 'inactive') }}</option>
                                     </select>

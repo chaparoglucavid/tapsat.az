@@ -23,6 +23,11 @@ return new class extends Migration
 
             $table->unique(['group', 'key', 'locale']);
             $table->index(['locale', 'group']);
+
+            $table->foreign('locale')
+                ->references('code')
+                ->on('languages')
+                ->cascadeOnDelete();
         });
     }
 

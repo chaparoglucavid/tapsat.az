@@ -77,7 +77,7 @@
                                                data-name="{{ $lang->name }}">{{ t_db('general', 'select_as_current') }}</a></li>
                                         <div class="dropdown-divider"></div>
                                         <li><a href="javascript:;"
-                                               class="dropdown-item text-danger delete-record">{{ t_db('general', 'delete') }}</a>
+                                               class="dropdown-item text-danger delete-record" data-uuid="{{ $lang->uuid }}">{{ t_db('general', 'delete') }}</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -128,5 +128,52 @@
                         });
                 });
             });
+
+            $(document).on('click', '.delete-record', function (e) {
+                e.preventDefault();
+
+                const $el = $(this);
+                const uid = ($el.data('uuid') || '').toString();
+
+                if (!uid) return;
+
+                const url = "{{ route('languages.destroy', ':uid') }}".replace(':uid', uid);
+
+                Swal.fire({
+                    title: "{{ t_db('general','are_you_sure_want_to_delete_this_language?') }}",
+                    text: "{{ t_db('general','note_that_when_deleting_a_language_its_translations_will_also_be_deleted') }}",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "{{ t_db('general','delete') }}"
+                }).then((result) => {
+                    if (!result.isConfirmed) return;
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: { _token: "{{ csrf_token() }}", _method: 'DELETE' },
+                        success: function(response) {
+                            $el.closest('tr').remove();
+
+                            Swal.fire(
+                                "{{ t_db('general','language_deleted_successfully') }}",
+                                "",
+                                "success"
+                            );
+                        },
+                        error: function(xhr) {
+                            const msg = xhr?.responseJSON?.message || "{{ t_db('general','something_went_wrong') }}";
+                            Swal.fire({
+                                title: "{{ t_db('general','error') }}",
+                                text: msg,
+                                icon: "error"
+                            });
+                        }
+                    });
+                });
+            });
+
     </script>
 @endsection
