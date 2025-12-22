@@ -19,7 +19,7 @@ class DashboardController extends Controller
         App::setLocale($lang);
         Session::put('locale', $lang);
 
-        notify('Sistem dili dəyişdirildi.', 'Uğurlu');
+        notify(t_db('general', 'system_language_changed_successfully'), t_db('general','success'));
         return redirect()->back();
     }
 }

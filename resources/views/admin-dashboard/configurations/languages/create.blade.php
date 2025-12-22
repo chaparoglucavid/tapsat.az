@@ -5,7 +5,17 @@
         <div class="row g-6">
             <div class="col-md-12">
                 <div class="card">
-                    <h5 class="card-header">{{ t_db('general', 'new_language_informations') }}</h5>
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3>{{ t_db('general', 'new_language_informations') }}</h3>
+                            <a href="{{ route('languages.index') }}" class="btn btn-outline-danger">
+                                <span>
+                                    <i class="bx bx-left-arrow-alt"></i>
+                                </span>
+                                {{ t_db('general', 'back') }}
+                            </a>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('languages.store') }}">
                             @csrf
@@ -46,7 +56,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end">
-                                <button class="btn btn-primary" type="submit">
+                                <button class="btn btn-outline-primary" type="submit">
                                 <span>
                                     <i class="bx bx-save"></i>
                                 </span>

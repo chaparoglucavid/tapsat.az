@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\{
     UploadFileController
 };
 use App\Http\Controllers\Admin\Configurations\LanguagesController;
+use App\Http\Controllers\Admin\Configurations\TranslationsController;
 
 Route::get('/', function () {
     notify()->success('Laravel Notify is awesome!');
@@ -22,6 +23,16 @@ Route::middleware('auth:web')->group(function () {
 
     //languages
     Route::resource('languages', LanguagesController::class);
+    Route::post('languages/{language}/set-default', [LanguagesController::class, 'setDefault'])
+        ->name('languages.set-default');
+    Route::get('languages/{uid}/translations', [LanguagesController::class, 'translations'])
+        ->name('languages.translations');
+    
+    //translations
+    Route::post('translations/{translation}', [TranslationsController::class, 'update'])
+        ->name('translations.update');
+    Route::post('translations/update-all/{language}', [TranslationsController::class, 'updateAll'])
+        ->name('translations.update-all');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
