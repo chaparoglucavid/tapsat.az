@@ -1,18 +1,4 @@
 @extends('admin-dashboard.layouts.admin-master')
-@section('css-code')
-    <style>
-        table.dataTable thead th {
-            font-size: 12px;
-            color: #6c757d;
-        }
-
-        /* SweetAlert overlay above header & sidebar */
-        .swal2-container {
-            z-index: 2000 !important;
-            position: fixed !important;
-        }
-    </style>
-@endsection
 @section('main-content')
     <div class="container-xxl flex-grow-1 container-p-y">
 

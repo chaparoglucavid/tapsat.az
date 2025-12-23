@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Admin\Configurations;
 use App\Http\Controllers\Controller;
 use App\Models\Translation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class TranslationsController extends Controller
 {
     public function update(Request $request, $translationId)
     {
-        
+
         try {
             $validated = $request->validate([
                 'value' => 'required|string|max:255'
@@ -60,5 +61,5 @@ class TranslationsController extends Controller
         });
 
         return back()->with('success', t_db('general', 'translations_updated_successfully'));
-    } 
+    }
 }

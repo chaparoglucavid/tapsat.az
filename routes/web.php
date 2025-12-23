@@ -43,5 +43,6 @@ Route::middleware('auth:web')->group(function () {
     Route::post('translations/update-all/{language}', [TranslationsController::class, 'updateAll'])
         ->name('translations.update-all');
 
+    Route::post('clear-cache', [DashboardController::class, 'clearCache'])->name('clear-cache');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

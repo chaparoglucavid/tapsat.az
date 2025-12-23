@@ -8,13 +8,18 @@ use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Translatable\HasTranslations;
 
 class City extends Model
 {
-    use SoftDeletes, LogsActivity;
+    use SoftDeletes, LogsActivity, HasTranslations;
     protected $table = 'cities';
     protected $fillable = [
         'uuid', 'name', 'is_active'
+    ];
+
+    public array $translatable = [
+        'name'
     ];
 
     protected static function boot()
