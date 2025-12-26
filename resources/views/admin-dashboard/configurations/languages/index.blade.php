@@ -29,7 +29,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($languages as $lang)
+                    @forelse($languages as $lang)
                         <tr>
                             <td>
                                 {{ $loop->iteration }}
@@ -74,8 +74,21 @@
                                    title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i></a>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                {{ t_db('general', 'language_not_added') }}
+                            </td>
+                        </tr>
+                    @endforelse
                     </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            {{ $languages->links('pagination::bootstrap-5') }}
+                        </td>
+                    </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>

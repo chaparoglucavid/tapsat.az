@@ -13,6 +13,7 @@
         "mckenziearts/laravel-notify": "^2.7",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-permission": "^6.24",
+        "spatie/laravel-sluggable": "^3.7",
         "spatie/laravel-translatable": "^6.12"
     },
     "require-dev": {

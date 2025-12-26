@@ -2,6 +2,7 @@
 
 use App\Models\Language;
 use App\Models\Translation;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 // function t_db(string $group, string $key): string
 // {
@@ -20,6 +21,28 @@ use Illuminate\Support\Facades\Session;
 //     );
 // }
 
+
+if (! function_exists('menuActive')) {
+    function menuActive(array|string $routes, string $class = 'active')
+    {
+        $routes = (array) $routes;
+
+        foreach ($routes as $route) {
+            if (Route::is($route)) {
+                return $class;
+            }
+        }
+
+        return '';
+    }
+}
+
+if (! function_exists('menuOpen')) {
+    function menuOpen(array|string $routes)
+    {
+        return menuActive($routes, 'open');
+    }
+}
 
 
 function t_db(string $group, string $key): string

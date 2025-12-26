@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\City;
+use App\Models\Language;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -70,15 +72,23 @@ class CitiesSeeder extends Seeder
             "Laçın",
             "Kəlbəcər",
             "Qubadlı",
-            "Füzuli"
         ];
 
+        $languages = Language::IsActive()->pluck('code')->toArray();
+
+
+
         foreach ($cities as $city) {
-            DB::table('cities')->insert([
+
+            $cityTranslations = [];
+            foreach ($languages as $language) {
+                $cityTranslations[$language] = $city;
+            }
+
+            City::create([
                 'uuid' => Str::uuid()->toString(),
-                'name' => $city,
-                'created_at' => now(),
-                'updated_at' => now()
+                'slug' => Str::slug($city),
+                'name' => $cityTranslations,
             ]);
         }
     }

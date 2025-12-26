@@ -12,7 +12,13 @@ use App\Http\Controllers\Admin\Configurations\{
 };
 
 use App\Http\Controllers\Admin\Addresses\{
-    CitiesController
+    CitiesController,
+    RegionsController
+};
+
+use App\Http\Controllers\Admin\DataStructure\{
+    CategoriesController,
+    CategoryAttributesController
 };
 
 Route::get('/', function () {
@@ -25,10 +31,16 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 Route::middleware('auth:web')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('change-language/{language}', [DashboardController::class, 'changeLanguage'])->name('change-language');
+    Route::post('change-language', [DashboardController::class, 'changeLanguage'])->name('change-language');
 
     //cities
     Route::resource('cities', CitiesController::class);
+    //regions
+    Route::resource('regions', RegionsController::class);
+    //categories
+    Route::resource('categories', CategoriesController::class);
+    //category-attributes
+    Route::resource('category-attributes', CategoryAttributesController::class);
 
     //languages
     Route::resource('languages', LanguagesController::class);

@@ -68,28 +68,29 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li class="menu-item active">
+        <li class="menu-item {{ menuActive('dashboard') }}">
             <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">{{ t_db('general', 'home') }}</div>
+                <div>{{ t_db('general', 'home') }}</div>
             </a>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ menuOpen(['cities.*', 'regions.*']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">{{ t_db('general', 'addresses') }}</div>
+                <div>{{ t_db('general', 'addresses') }}</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item {{ menuActive('cities.*') }}">
                     <a href="{{ route('cities.index') }}" class="menu-link">
-                        <div data-i18n="Without menu">{{ t_db('general', 'cities') }}</div>
+                        <div>{{ t_db('general', 'cities') }}</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">{{ t_db('general', 'districts') }}</div>
+
+                <li class="menu-item {{ menuActive('regions.*') }}">
+                    <a href="{{ route('regions.index') }}" class="menu-link">
+                        <div>{{ t_db('general', 'regions') }}</div>
                     </a>
                 </li>
             </ul>
@@ -147,20 +148,20 @@
             </a>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ menuOpen(['categories.*', 'category-attributes.*']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">{{ t_db('general', 'categories') }}</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
+                <li class="menu-item {{ menuActive('categories.*') }}">
+                    <a href="{{ route('categories.index') }}" class="menu-link">
                         <div data-i18n="Without menu">{{ t_db('general', 'all_categories') }}</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
+                <li class="menu-item {{ menuActive('category-attributes.*') }}">
+                    <a href="{{ route('category-attributes.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">{{ t_db('general', 'category_attributes') }}</div>
                     </a>
                 </li>

@@ -12,12 +12,12 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Spatie\Translatable\HasTranslations;
 
-class City extends Model
+class Category extends Model
 {
     use SoftDeletes, LogsActivity, HasTranslations, HasSlug;
-    protected $table = 'cities';
+    protected $table = 'categories';
     protected $fillable = [
-        'uuid', 'name', 'slug', 'is_active'
+        'uuid', 'parent_uuid' ,'name', 'slug' ,'is_active'
     ];
 
     public array $translatable = [
@@ -56,8 +56,8 @@ class City extends Model
         return LogOptions::defaults()
             ->logOnly(['name','status'])
             ->logOnlyDirty()
-            ->useLogName('city')
-            ->setDescriptionForEvent(fn(string $event) => "City {$event}");
+            ->useLogName('category')
+            ->setDescriptionForEvent(fn(string $event) => "Category {$event}");
     }
 
     public function getSlugOptions(): SlugOptions
@@ -73,9 +73,14 @@ class City extends Model
         return $query->where('is_active', true);
     }
 
-    public function regions()
+    public function children()
     {
-        return $this->hasMany(Region::class, 'city_uuid', 'uuid');
+        return $this->hasMany(Category::class, 'parent_uuid', 'uuid');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_uuid', 'uuid');
     }
 
 }

@@ -11,14 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cities', function (Blueprint $table) {
+        Schema::create('regions', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
+            $table->uuid('city_uuid');
             $table->string('name');
             $table->string('slug')->unique();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
+
+            $table->index('city_uuid');
+            $table->foreign('city_uuid')->references('uuid')->on('cities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cities');
+        Schema::dropIfExists('regions');
     }
 };

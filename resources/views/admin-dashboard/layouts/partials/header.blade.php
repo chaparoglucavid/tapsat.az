@@ -24,12 +24,19 @@
         <!-- /Search -->
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+        <li class="nav-item lh-1 me-3">
+            {{ app()->getLocale() }}
+        </li>
+
             <!-- Place this tag where you want the button to render. -->
             @foreach($languages as $lang)
                 <li class="nav-item lh-1 me-3">
-                    <a href="{{ route('change-language', $lang->code) }}">
-                        {{ $lang->name }}
-                    </a>
+                    <form action="{{ route('change-language') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="code" value="{{ $lang->code }}">
+                        <button type="submit" class="btn btn-link text-decoration-none">{{ $lang->name }}</button>
+                    </form>
                 </li>
             @endforeach
 

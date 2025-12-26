@@ -18,7 +18,7 @@ class LanguagesController extends Controller
      */
     public function index()
     {
-        $languages = Language::all();
+        $languages = Language::orderBy('name')->paginate(20);
         return view('admin-dashboard.configurations.languages.index', compact('languages'));
     }
 

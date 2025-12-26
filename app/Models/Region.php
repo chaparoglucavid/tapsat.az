@@ -5,16 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
+use Spatie\Translatable\HasTranslations;
 
-class Language extends Model
+class Region extends Model
 {
-    use SoftDeletes, LogsActivity;
-    protected $table = 'languages';
+    use SoftDeletes, LogsActivity, HasTranslations, HasSlug;
+    protected $table = 'regions';
     protected $fillable = [
-        'uuid', 'code', 'name', 'image_path' ,'is_active', 'is_default'
+        'uuid', 'city_uuid' ,'name', 'slug' ,'is_active'
+    ];
+
+    public array $translatable = [
+        'name'
     ];
 
     protected static function boot()
@@ -35,11 +42,6 @@ class Language extends Model
         });
     }
 
-    public function scopeIsActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
     public function tapActivity(Activity $activity, string $eventName)
     {
         if ($eventName === 'deleted') {
@@ -52,15 +54,23 @@ class Language extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['code', 'name', 'is_active', 'is_default'])
+            ->logOnly(['name','status'])
             ->logOnlyDirty()
-            ->useLogName('language')
-            ->setDescriptionForEvent(fn(string $event) => "Language {$event}");
+            ->useLogName('region')
+            ->setDescriptionForEvent(fn(string $event) => "Region {$event}");
     }
 
-
-    public function translations()
+    public function getSlugOptions(): SlugOptions
     {
-        return $this->hasMany(Translation::class, 'locale', 'code');
+        return SlugOptions::create()
+            ->generateSlugsFrom(fn () => $this->getTranslation('name', 'az'))
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_uuid', 'uuid');
+    }
+
 }

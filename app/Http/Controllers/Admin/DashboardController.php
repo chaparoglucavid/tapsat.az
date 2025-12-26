@@ -15,10 +15,11 @@ class DashboardController extends Controller
         return view('admin-dashboard.dashboard');
     }
 
-    public function changeLanguage($lang)
+    public function changeLanguage(Request $request)
     {
-        App::setLocale($lang);
-        Session::put('locale', $lang);
+        $locale = $request->code;
+        App::setLocale($locale);
+        Session::put('locale', $locale);
 
         notify(t_db('general', 'system_language_changed_successfully'), t_db('general','success'));
         return redirect()->back();

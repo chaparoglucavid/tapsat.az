@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin\Addresses;
 
 use App\Http\Controllers\Controller;
 use App\Models\City;
+use App\Models\Language;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class CitiesController extends Controller
 {
@@ -22,7 +25,8 @@ class CitiesController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:100|unique:cities,name',
+            'name' => 'required|array',
+            'name.*' => 'required|string|max:100',
             'is_active' => 'required|boolean',
         ]);
 
@@ -63,18 +67,38 @@ class CitiesController extends Controller
         return view('admin-dashboard.addresses.cities.edit', compact('city'));
     }
 
-    public function update(Request $request, string $uuid)
+   public function update(Request $request, string $uuid)
     {
         $city = City::where('uuid', $uuid)->first();
-        if (!$city) {
+
+        if (! $city) {
             notify()->error(t_db('general', 'city_not_found'));
             return redirect()->route('cities.index');
         }
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:100|unique:cities,name,' . $city->id,
+        $languages = Language::where('is_active', true)->get();
+
+        if ($languages->isEmpty()) {
+            notify()->error('No active languages found');
+            return back();
+        }
+
+        $rules = [
             'is_active' => 'required|boolean',
-        ]);
+        ];
+
+        foreach ($languages as $language) {
+            $rules["name.{$language->code}"] = [
+                'required',
+                'string',
+                'max:100',
+
+                Rule::unique('cities', "name->{$language->code}")
+                    ->ignore($city->uuid),
+            ];
+        }
+
+        $validated = $request->validate($rules);
 
         try {
             $city->update([
@@ -85,8 +109,12 @@ class CitiesController extends Controller
             notify()->success(t_db('general', 'city_updated_successfully'));
             return redirect()->route('cities.index');
 
-        } catch (\Exception $e) {
-            \Log::error('City update failed: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            \Log::error('City update failed', [
+                'uuid' => $uuid,
+                'error' => $e->getMessage(),
+            ]);
+
             notify()->error(t_db('general', 'something_went_wrong'));
             return back()->withInput();
         }
