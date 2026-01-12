@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\{
     DashboardController,
-    UploadFileController
 };
 use App\Http\Controllers\Admin\Configurations\{
     LanguagesController,
@@ -18,8 +17,21 @@ use App\Http\Controllers\Admin\Addresses\{
 
 use App\Http\Controllers\Admin\DataStructure\{
     CategoriesController,
-    CategoryAttributesController
+    CategoryAttributesController,
+    CategoryPackagePricesController,
+    AttributesController
 };
+
+use App\Http\Controllers\Admin\Packages\{
+    PackagesController,
+};
+
+use App\Http\Controllers\Admin\Announcements\{
+    AnnouncementsController
+};
+
+
+use App\Http\Controllers\Admin\MediaController;
 
 Route::get('/', function () {
     notify()->success('Laravel Notify is awesome!');
@@ -39,8 +51,25 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('regions', RegionsController::class);
     //categories
     Route::resource('categories', CategoriesController::class);
+
+    //category-package-prices
+    Route::resource('category-package-prices', CategoryPackagePricesController::class)->only(['index', 'update']);
+
+    //attributes
+    Route::resource('attributes', AttributesController::class);
+
     //category-attributes
-    Route::resource('category-attributes', CategoryAttributesController::class);
+    Route::resource('category-attributes', CategoryAttributesController::class)->only(['index', 'edit', 'update']);
+
+    //media
+    Route::post('media/upload', [MediaController::class, 'upload'])->name('media.upload');
+    Route::delete('media/revert', [MediaController::class, 'revert'])->name('media.revert');
+
+    //announcements
+    Route::resource('announcements', AnnouncementsController::class);
+
+    //packages
+    Route::resource('packages', PackagesController::class);
 
     //languages
     Route::resource('languages', LanguagesController::class);

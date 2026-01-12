@@ -8,16 +8,17 @@
 
                     {{-- HEADER --}}
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3>{{ t_db('general', 'add_city') }}</h3>
-                        <a href="{{ route('cities.index') }}" class="btn btn-outline-danger">
+                        <h3>{{ t_db('general', 'edit_package') }}</h3>
+                        <a href="{{ route('packages.index') }}" class="btn btn-outline-danger">
                             <i class="bx bx-left-arrow-alt"></i>
                             {{ t_db('general', 'back') }}
                         </a>
                     </div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('categories.store') }}">
+                        <form method="POST" action="{{ route('packages.update', $package->uuid) }}">
                             @csrf
+                            @method('PUT')
 
                             <ul class="nav nav-pills mb-4" role="tablist">
                                 @foreach($languages as $lang)
@@ -43,15 +44,15 @@
 
                                         <div class="mb-3">
                                             <label class="form-label">
-                                                {{ t_db('general', 'city_name') }} ({{ strtoupper($lang->code) }})
+                                                {{ t_db('general', 'package_name') }} ({{ strtoupper($lang->code) }})
                                             </label>
 
                                             <input
                                                 type="text"
                                                 name="name[{{ $lang->code }}]"
                                                 class="form-control @error('name.'.$lang->code) is-invalid @enderror"
-                                                value="{{ old('name.'.$lang->code) }}"
-                                                placeholder="{{ t_db('general', 'add_city_name') }}"
+                                                value="{{ $package->getTranslation('name', $lang->code) }}"
+                                                placeholder="{{ t_db('general', 'package_name') }}"
                                                 required
                                             >
 
@@ -63,23 +64,13 @@
                                     </div>
                                 @endforeach
                                     <div class="row mb-4">
-                                        <div class="col-md-6">
-                                            <label class="form-label">{{ t_db('general', 'parent_category') }}</label>
-                                            <select name="parent_uuid" class="form-select">
-                                                <option disabled selected>{{ t_db('general', 'select') }}</option>
-                                                <option value="parent">------</option>
-                                                @foreach($categories as $category)
-                                                    <option value="{{$category->uuid}}" {{ old($category->uuid) === $category->uuid ? 'selected' : '' }}>{{ $category->getTranslation('name', app()->getLocale()) }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <label class="form-label">{{ t_db('general', 'status') }}</label>
                                             <select name="is_active" class="form-select">
-                                                <option value="1" {{ old('is_active', 1) == 1 ? 'selected' : '' }}>
+                                                <option value="1" {{ old('is_active', $package->is_active) == 1 ? 'selected' : '' }}>
                                                     {{ t_db('general', 'active') }}
                                                 </option>
-                                                <option value="0" {{ old('is_active') == 0 ? 'selected' : '' }}>
+                                                <option value="0" {{ old('is_active', $package->is_active) == 0 ? 'selected' : '' }}>
                                                     {{ t_db('general', 'inactive') }}
                                                 </option>
                                             </select>
@@ -89,7 +80,7 @@
                             <div class="d-flex justify-content-end">
                                 <button type="submit" class="btn btn-outline-primary">
                                     <i class="bx bx-save"></i>
-                                    {{ t_db('general', 'save') }}
+                                    {{ t_db('general', 'update') }}
                                 </button>
                             </div>
 

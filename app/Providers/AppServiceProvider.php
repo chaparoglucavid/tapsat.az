@@ -10,6 +10,8 @@ use Illuminate\Support\ServiceProvider;
 use App\Translations\TranslationLoader;
 use Illuminate\Support\Facades\View;
 
+use Illuminate\Support\Facades\Schema;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -25,7 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $languages = Language::all();
-        View::share(['languages' => $languages]);
+        if (Schema::hasTable('languages')) {
+            $languages = Language::all();
+            View::share(['languages' => $languages]);
+        }
     }
 }

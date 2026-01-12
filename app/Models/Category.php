@@ -83,4 +83,17 @@ class Category extends Model
         return $this->belongsTo(Category::class, 'parent_uuid', 'uuid');
     }
 
+    public function packages()
+    {
+        return $this->belongsToMany(Package::class, 'category_package_prices', 'category_uuid', 'package_uuid', 'uuid', 'uuid')
+            ->withPivot('price')
+            ->withTimestamps();
+    }
+
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'category_attributes', 'category_uuid', 'attribute_id', 'uuid', 'id')
+            ->withPivot('is_required', 'is_filterable')
+            ->withTimestamps();
+    }
 }

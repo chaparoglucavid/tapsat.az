@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+
+class Announcement extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $guarded = [];
+
+    protected $casts = [
+        'is_new' => 'boolean',
+        'has_delivery' => 'boolean',
+        'published_at' => 'datetime',
+        'expires_at' => 'datetime',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function attributeValues()
+    {
+        return $this->hasMany(AnnouncementAttributeValue::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(AnnouncementImage::class)->orderBy('order');
+    }
+    
+    public function mainImage()
+    {
+        return $this->hasOne(AnnouncementImage::class)->where('is_main', true);
+    }
+}

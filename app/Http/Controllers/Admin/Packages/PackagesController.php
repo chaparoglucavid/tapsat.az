@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Admin\DataStructure;
+namespace App\Http\Controllers\Admin\Packages;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Package;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class CategoriesController extends Controller
+class PackagesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = Category::withCount('children')->paginate(20);
-        return view('admin-dashboard.data-structure.categories.index', compact('categories'));
+        $packages = Package::paginate(20);
+        return view('admin-dashboard.packages.index', compact('packages'));
     }
 
     /**
@@ -23,8 +24,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        $categories = Category::IsActive()->get();
-        return view('admin-dashboard.data-structure.categories.create', compact('categories'));
+        return view('admin-dashboard.packages.create');
     }
 
     /**
@@ -35,28 +35,25 @@ class CategoriesController extends Controller
         $validated = $request->validate([
             'name' => 'required|array',
             'name.*' => 'required|string|max:100',
-            'parent_uuid' => 'required|string|max:100',
             'is_active' => 'required|boolean',
         ]);
 
         try {
-            Category::create([
+            Package::create([
                 'uuid' => Str::uuid(),
-                'parent_uuid' => $validated['parent_uuid'] === 'parent' ? null : $validated['parent_uuid'],
                 'name' => $validated['name'],
                 'is_active' => $validated['is_active'],
             ]);
 
-            notify()->success(t_db('general', 'category_added_successfully'));
-            return redirect()->route('categories.index');
+            notify()->success(t_db('general', 'package_added_successfully'));
+            return redirect()->route('packages.index');
 
         } catch (\Exception $e) {
-            \Log::error('Category store failed: ' . $e->getMessage());
+            \Log::error('Package store failed: ' . $e->getMessage());
             notify()->error(t_db('general', 'something_went_wrong'));
             return back()->withInput();
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -71,9 +68,8 @@ class CategoriesController extends Controller
      */
     public function edit(string $uuid)
     {
-        $category = Category::where('uuid', $uuid)->firstOrFail();
-        $categories = Category::IsActive()->where('uuid', '!=', $uuid)->get();
-        return view('admin-dashboard.data-structure.categories.edit', compact('category', 'categories'));
+        $package = Package::where('uuid', $uuid)->firstOrFail();
+        return view('admin-dashboard.packages.edit', compact('package'));
     }
 
     /**
@@ -81,27 +77,26 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, string $uuid)
     {
-        $category = Category::where('uuid', $uuid)->firstOrFail();
+        $package = Package::where('uuid', $uuid)->firstOrFail();
 
         $validated = $request->validate([
             'name' => 'required|array',
             'name.*' => 'required|string|max:100',
-            'parent_uuid' => 'required|string|max:100',
             'is_active' => 'required|boolean',
         ]);
 
         try {
-            $category->update([
-                'parent_uuid' => $validated['parent_uuid'] === 'parent' ? null : $validated['parent_uuid'],
+            // Update Package
+            $package->update([
                 'name' => $validated['name'],
                 'is_active' => $validated['is_active'],
             ]);
 
-            notify()->success(t_db('general', 'category_updated_successfully'));
-            return redirect()->route('categories.index');
+            notify()->success(t_db('general', 'package_updated_successfully'));
+            return redirect()->route('packages.index');
 
         } catch (\Exception $e) {
-            \Log::error('Category update failed: ' . $e->getMessage());
+            \Log::error('Package update failed: ' . $e->getMessage());
             notify()->error(t_db('general', 'something_went_wrong'));
             return back()->withInput();
         }
@@ -110,8 +105,18 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $uuid)
     {
-        //
+        try {
+            $package = Package::where('uuid', $uuid)->firstOrFail();
+            $package->delete();
+            
+            notify()->success(t_db('general', 'package_deleted_successfully'));
+            return redirect()->route('packages.index');
+        } catch (\Exception $e) {
+            \Log::error('Package delete failed: ' . $e->getMessage());
+            notify()->error(t_db('general', 'something_went_wrong'));
+            return back();
+        }
     }
 }

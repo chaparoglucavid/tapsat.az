@@ -116,56 +116,51 @@
             </ul>
         </li>
 
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">{{ t_db('general', 'announcements') }}</div>
+        <!-- Announcements -->
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">{{ t_db('general', 'announcements') }}</span>
+        </li>
+        <li class="menu-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
+            <a href="{{ route('announcements.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-detail"></i>
+                <div class="text-truncate" data-i18n="{{ t_db('general', 'announcements') }}">{{ t_db('general', 'announcements') }}</div>
             </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">{{ t_db('general', 'all_announcements') }}</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">{{ t_db('general', 'comments') }}</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">{{ t_db('general', 'complaints') }}</div>
-                    </a>
-                </li>
-            </ul>
         </li>
 
-        <li class="menu-item">
-            <a href="cards-basic.html" class="menu-link">
+        <!-- Data Structure -->
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">{{ t_db('general', 'data_structure') }}</span>
+        </li>
+
+        <li class="menu-item {{ request()->routeIs('categories.*') ? 'active' : '' }}">
+            <a href="{{ route('categories.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div class="text-truncate" data-i18n="{{ t_db('general', 'categories') }}">{{ t_db('general', 'categories') }}</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('category-package-prices.*') ? 'active' : '' }}">
+            <a href="{{ route('category-package-prices.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div class="text-truncate" data-i18n="{{ t_db('general', 'category_package_prices') }}">{{ t_db('general', 'package_prices') }}</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('attributes.*') ? 'active' : '' }}">
+            <a href="{{ route('attributes.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div class="text-truncate" data-i18n="{{ t_db('general', 'attributes') }}">{{ t_db('general', 'attributes') }}</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('category-attributes.*') ? 'active' : '' }}">
+            <a href="{{ route('category-attributes.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div class="text-truncate" data-i18n="{{ t_db('general', 'category_attributes') }}">{{ t_db('general', 'category_attributes') }}</div>
+            </a>
+        </li>
+        <li class="menu-item {{ request()->routeIs('packages.*') ? 'active' : '' }}">
+            <a href="{{ route('packages.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div class="text-truncate" data-i18n="Basic">{{ t_db('general', 'packages') }}</div>
+                <div class="text-truncate" data-i18n="{{ t_db('general', 'packages') }}">{{ t_db('general', 'packages') }}</div>
             </a>
-        </li>
-
-        <li class="menu-item {{ menuOpen(['categories.*', 'category-attributes.*']) }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">{{ t_db('general', 'categories') }}</div>
-            </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item {{ menuActive('categories.*') }}">
-                    <a href="{{ route('categories.index') }}" class="menu-link">
-                        <div data-i18n="Without menu">{{ t_db('general', 'all_categories') }}</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ menuActive('category-attributes.*') }}">
-                    <a href="{{ route('category-attributes.index') }}" class="menu-link">
-                        <div data-i18n="Without navbar">{{ t_db('general', 'category_attributes') }}</div>
-                    </a>
-                </li>
-            </ul>
         </li>
 
         <li class="menu-item">
