@@ -16,53 +16,55 @@
                     <div class="card-body">
                         <form id="saveAllForm">
                             @csrf
-                            <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>{{ t_db('general', 'code') }}</th>
-                                    <th>{{ t_db('generat', 'key') }}</th>
-                                    <th>{{ t_db('general', 'value') }}</th>
-                                    <th>{{ t_db('general', 'operations') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($translations as $translation)
-                                    <tr>
-                                        <td>{{ $translation->language->code }}</td>
-                                        <td>{{ $translation->key }}</td>
-                                        <td>
-                                            <input type="text" required
-                                            class="form-control"
-                                            name="translations[{{ $translation->uuid }}]"
-                                            value="{{ $translation->value }}">
-                                        </td>
-                                        <td>
-                                            <button type="button"
-                                                    class="btn btn-primary save-translation"
-                                                    data-id="{{ $translation->uuid }}">
-                                                {{ t_db('general', 'save') }}
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="4">
-                                        <div class="d-flex justify-content-end">
-                                            <button type="button" id="saveAllBtn" class="btn btn-primary">
-                                                {{ t_db('general', 'save_all') }}
-                                            </button> 
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4">
-                                        {{ $translations->links('pagination::bootstrap-5') }}
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ t_db('general', 'code') }}</th>
+                                            <th>{{ t_db('generat', 'key') }}</th>
+                                            <th>{{ t_db('general', 'value') }}</th>
+                                            <th>{{ t_db('general', 'operations') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($translations as $translation)
+                                            <tr>
+                                                <td>{{ $translation->language->code }}</td>
+                                                <td>{{ $translation->key }}</td>
+                                                <td>
+                                                    <input type="text" required
+                                                    class="form-control"
+                                                    name="translations[{{ $translation->uuid }}]"
+                                                    value="{{ $translation->value }}">
+                                                </td>
+                                                <td>
+                                                    <button type="button"
+                                                            class="btn btn-primary save-translation"
+                                                            data-id="{{ $translation->uuid }}">
+                                                        {{ t_db('general', 'save') }}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4">
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="button" id="saveAllBtn" class="btn btn-primary">
+                                                        {{ t_db('general', 'save_all') }}
+                                                    </button> 
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4">
+                                                {{ $translations->links('pagination::bootstrap-5') }}
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </form>
                     </div>
                 </div>

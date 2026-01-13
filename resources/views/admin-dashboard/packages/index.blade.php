@@ -15,54 +15,56 @@
             </div>
 
             <div class="card-body">
-                <table class="table align-middle">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>{{ t_db('general', 'name') }}</th>
-                        <th>{{ t_db('general', 'is_active') }}</th>
-                        <th>{{ t_db('general', 'actions') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @forelse($packages as $package)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $package->name }}</td>
-                            <td>
-                                <span
-                                    class="badge bg-label-{{ $package->is_active ? 'success' : 'danger' }}">{{ $package->is_active ? t_db('general', 'active') : t_db('general', 'inactive') }}</span>
-                            </td>
-                            <td class="d-flex align-items-center">
-                                <a href="{{ route('packages.edit', $package->uuid) }}" class="btn btn-icon item-edit"
-                                   title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i>
-                                </a>
-                                <form action="{{ route('packages.destroy', $package->uuid) }}" method="POST" onsubmit="return confirm('{{ t_db('general', 'are_you_sure') }}');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-icon item-trash text-danger" title="{{ t_db('general', 'delete') }}">
-                                        <i class="icon-base bx bx-trash icon-sm"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">
-                                {{ t_db('general', 'no_records_found') }}
-                            </td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="5">
-                                {{ $packages->links('pagination::bootstrap-5') }}
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+    <div class="table-responsive text-nowrap">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>{{ t_db('general', 'name') }}</th>
+                <th>{{ t_db('general', 'is_active') }}</th>
+                <th>{{ t_db('general', 'actions') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            @forelse($packages as $package)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $package->name }}</td>
+                    <td>
+                        <span
+                            class="badge bg-label-{{ $package->is_active ? 'success' : 'danger' }}">{{ $package->is_active ? t_db('general', 'active') : t_db('general', 'inactive') }}</span>
+                    </td>
+                    <td class="d-flex align-items-center">
+                        <a href="{{ route('packages.edit', $package->uuid) }}" class="btn btn-icon item-edit"
+                           title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i>
+                        </a>
+                        <form action="{{ route('packages.destroy', $package->uuid) }}" method="POST" onsubmit="return confirm('{{ t_db('general', 'are_you_sure') }}');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-icon item-trash text-danger" title="{{ t_db('general', 'delete') }}">
+                                <i class="icon-base bx bx-trash icon-sm"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">
+                        {{ t_db('general', 'no_records_found') }}
+                    </td>
+                </tr>
+            @endforelse
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        {{ $packages->links('pagination::bootstrap-5') }}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
         </div>
     </div>
 @endsection

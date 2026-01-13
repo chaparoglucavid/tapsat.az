@@ -59,11 +59,26 @@
                                 <div class="col-md-6">
                                     <label class="form-label">{{ t_db('general', 'status') }}</label>
                                     <select name="status" class="form-select" required>
-                                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                        <option value="rejected" {{ old('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                                        <option value="sold" {{ old('status') == 'sold' ? 'selected' : '' }}>Sold</option>
+                                        @foreach(\App\Enums\AnnouncementStatus::cases() as $status)
+                                            <option value="{{ $status->value }}" {{ old('status') == $status->value ? 'selected' : '' }}>
+                                                {{ $status->label() }}
+                                            </option>
+                                        @endforeach
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">{{ t_db('general', 'packages') }}</label>
+                                <div class="d-flex gap-3 flex-wrap">
+                                    @foreach($packages as $package)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="packages[]" value="{{ $package->id }}" id="package_{{ $package->id }}" {{ is_array(old('packages')) && in_array($package->id, old('packages')) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="package_{{ $package->id }}">
+                                                {{ $package->getTranslation('name', app()->getLocale()) }} ({{ $package->duration_days }} {{ t_db('general', 'days') }})
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
 
@@ -126,7 +141,7 @@
     </div>
 @endsection
 
-@push('css')
+@section('css-code')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" rel="stylesheet" />
     <style>
         .dropzone {
@@ -135,16 +150,16 @@
             background: #fdfdfd;
         }
     </style>
-@endpush
+@endsection
 
-@push('js')
+@section('js-code')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     <script>
         Dropzone.autoDiscover = false;
         
         var uploadedDocumentMap = {}
         var myDropzone = new Dropzone("#document-dropzone", {
-            url: '{{ route('media.upload') }}',
+            url: "{{ route('media.upload') }}",
             maxFilesize: 5, // MB
             addRemoveLinks: true,
             headers: {
@@ -169,8 +184,8 @@
                      headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
                      type: 'DELETE',
                      url: '{{ route('media.revert') }}',
-                     data: name,
-                     dataType: 'html'
+                     data: {filename: name},
+                     dataType: 'json'
                  });
             },
             init: function () {
@@ -187,4 +202,4 @@
             }
         });
     </script>
-@endpush
+@endsection

@@ -96,15 +96,15 @@
             </ul>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ menuOpen(['users.*']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">{{ t_db('general', 'accounts') }}</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
+                <li class="menu-item {{ menuActive('users.*') }}">
+                    <a href="{{ route('users.index') }}" class="menu-link">
                         <div data-i18n="Without menu">{{ t_db('general', 'users') }}</div>
                     </a>
                 </li>

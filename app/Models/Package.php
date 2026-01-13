@@ -14,7 +14,7 @@ class Package extends Model
     protected $table = 'packages';
 
     protected $fillable = [
-        'uuid', 'name', 'is_active'
+        'uuid', 'name', 'is_active', 'duration_days'
     ];
 
     public array $translatable = [
@@ -42,5 +42,10 @@ class Package extends Model
         return $this->belongsToMany(Category::class, 'category_package_prices', 'package_uuid', 'category_uuid', 'uuid', 'uuid')
             ->withPivot('price')
             ->withTimestamps();
+    }
+    
+    public function announcementPackages()
+    {
+        return $this->hasMany(AnnouncementPackage::class);
     }
 }

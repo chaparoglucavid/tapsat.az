@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Enums\UserType;
 
 class User extends Authenticatable
 {
@@ -21,7 +22,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone_number',
         'password',
+        'otp_code',
+        'otp_expires_at',
         'failed_login_attempts',
         'locked_until',
         'type'
@@ -33,8 +37,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
+        'otp_code',
     ];
 
     /**
@@ -46,7 +50,32 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'otp_expires_at' => 'datetime',
         ];
+    }
+
+    public function creditCards()
+    {
+        return $this->hasMany(UserCreditCard::class);
+    }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function scopeIsUser($query)
+    {
+        return $query->where('type', UserType::USER);
+    }
+
+    public function scopeIsAdmin($query)
+    {
+        return $query->where('type', UserType::ADMIN);
     }
 }

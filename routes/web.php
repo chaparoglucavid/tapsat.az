@@ -29,6 +29,8 @@ use App\Http\Controllers\Admin\Packages\{
 use App\Http\Controllers\Admin\Announcements\{
     AnnouncementsController
 };
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\UserCreditCardsController;
 
 
 use App\Http\Controllers\Admin\MediaController;
@@ -67,6 +69,12 @@ Route::middleware('auth:web')->group(function () {
 
     //announcements
     Route::resource('announcements', AnnouncementsController::class);
+
+    //users
+    Route::resource('users', UsersController::class);
+    
+    //user credit cards (nested or standalone, maybe standalone for now but linked)
+    Route::resource('user-credit-cards', UserCreditCardsController::class);
 
     //packages
     Route::resource('packages', PackagesController::class);

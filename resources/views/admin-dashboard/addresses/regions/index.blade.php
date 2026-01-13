@@ -15,51 +15,53 @@
             </div>
 
             <div class="card-body">
-                <table id="languages" class="table align-middle">
-                    <thead>
-                    <tr>
-                        <th>
-                            #
-                        </th>
-                        <th>{{ t_db('general', 'city') }}</th>
-                        <th>{{ t_db('general', 'name') }}</th>
-                        <th>{{ t_db('general', 'is_active') }}</th>
-                        <th>{{ t_db('general', 'actions') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @forelse($regions as $region)
-                        <tr>
-                            <td> {{ $loop->iteration }} </td>
-                            <td>{{ $region->city?->name }}</td>
-                            <td>{{ $region->getTranslation('name', app()->getLocale()) }}</td>
-                            <td>
-                                <span
-                                    class="badge bg-label-{{ $region->is_active ? 'success' : 'danger' }}">{{ $region->is_active ? t_db('general', 'active') : t_db('general', 'inactive') }}</span>
-                            </td>
-                            <td class="d-flex align-items-center">
-                                <a href="{{ route('regions.edit', $region->uuid) }}" class="btn btn-icon item-edit"
-                                   title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">
-                                {{ t_db('region_not_added') }}
-                            </td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="5">
-                                {{ $regions->links('pagination::bootstrap-5') }}
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+    <div class="table-responsive text-nowrap">
+        <table id="languages" class="table align-middle">
+            <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>{{ t_db('general', 'city') }}</th>
+                <th>{{ t_db('general', 'name') }}</th>
+                <th>{{ t_db('general', 'is_active') }}</th>
+                <th>{{ t_db('general', 'actions') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            @forelse($regions as $region)
+                <tr>
+                    <td> {{ $loop->iteration }} </td>
+                    <td>{{ $region->city?->name }}</td>
+                    <td>{{ $region->getTranslation('name', app()->getLocale()) }}</td>
+                    <td>
+                        <span
+                            class="badge bg-label-{{ $region->is_active ? 'success' : 'danger' }}">{{ $region->is_active ? t_db('general', 'active') : t_db('general', 'inactive') }}</span>
+                    </td>
+                    <td class="d-flex align-items-center">
+                        <a href="{{ route('regions.edit', $region->uuid) }}" class="btn btn-icon item-edit"
+                           title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i>
+                        </a>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">
+                        {{ t_db('region_not_added') }}
+                    </td>
+                </tr>
+            @endforelse
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        {{ $regions->links('pagination::bootstrap-5') }}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
         </div>
     </div>
 @endsection

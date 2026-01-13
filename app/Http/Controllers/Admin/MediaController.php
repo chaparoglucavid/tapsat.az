@@ -14,6 +14,10 @@ class MediaController extends Controller
             'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB
         ]);
 
+        if (!Storage::disk('public')->exists('tmp')) {
+            Storage::disk('public')->makeDirectory('tmp');
+        }
+
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
@@ -31,7 +35,7 @@ class MediaController extends Controller
 
     public function revert(Request $request)
     {
-        $filename = $request->getContent();
+        $filename = $request->input('filename');
         if ($filename) {
             Storage::disk('public')->delete('tmp/' . $filename);
             return response()->json(['success' => true]);

@@ -15,49 +15,51 @@
             </div>
 
             <div class="card-body">
-                <table class="table align-middle">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>{{ t_db('general', 'name') }}</th>
-                        <th>{{ t_db('general', 'type') }}</th>
-                        <th>{{ t_db('general', 'status') }}</th>
-                        <th>{{ t_db('general', 'actions') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @forelse($attributes as $attribute)
+                <div class="table-responsive text-nowrap">
+                    <table class="table align-middle">
+                        <thead>
                         <tr>
-                            <td> {{ $loop->iteration }} </td>
-                            <td>{{ $attribute->getTranslation('name', app()->getLocale()) }}</td>
-                            <td><span class="badge bg-label-info">{{ $attribute->type }}</span></td>
-                            <td>
-                                <span class="badge bg-label-{{ $attribute->is_active ? 'success' : 'danger' }}">
-                                    {{ $attribute->is_active ? t_db('general', 'active') : t_db('general', 'inactive') }}
-                                </span>
-                            </td>
-                            <td class="d-flex align-items-center">
-                                <a href="{{ route('attributes.edit', $attribute->uuid) }}" class="btn btn-icon item-edit"
-                                   title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i>
-                                </a>
-                            </td>
+                            <th>#</th>
+                            <th>{{ t_db('general', 'name') }}</th>
+                            <th>{{ t_db('general', 'type') }}</th>
+                            <th>{{ t_db('general', 'status') }}</th>
+                            <th>{{ t_db('general', 'actions') }}</th>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">
-                                {{ t_db('general', 'no_records_found') }}
-                            </td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="5">
-                                {{ $attributes->links('pagination::bootstrap-5') }}
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
+                        </thead>
+                        <tbody>
+                        @forelse($attributes as $attribute)
+                            <tr>
+                                <td> {{ $loop->iteration }} </td>
+                                <td>{{ $attribute->getTranslation('name', app()->getLocale()) }}</td>
+                                <td><span class="badge bg-label-info">{{ $attribute->type }}</span></td>
+                                <td>
+                                    <span class="badge bg-label-{{ $attribute->is_active ? 'success' : 'danger' }}">
+                                        {{ $attribute->is_active ? t_db('general', 'active') : t_db('general', 'inactive') }}
+                                    </span>
+                                </td>
+                                <td class="d-flex align-items-center">
+                                    <a href="{{ route('attributes.edit', $attribute->uuid) }}" class="btn btn-icon item-edit"
+                                       title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    {{ t_db('general', 'no_records_found') }}
+                                </td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    {{ $attributes->links('pagination::bootstrap-5') }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -21,6 +21,7 @@ class Attribute extends Model
             $model->uuid = (string) Str::uuid();
         });
     }
+    
 
     public function options()
     {

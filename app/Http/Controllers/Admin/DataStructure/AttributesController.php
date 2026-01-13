@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class AttributesController extends Controller
 {
@@ -41,28 +42,51 @@ class AttributesController extends Controller
         ]);
 
         try {
+            DB::beginTransaction();
+
+            $nameForSlug = $validated['name']['en'] ?? $validated['name'][app()->getLocale()] ?? reset($validated['name']);
+            $slug = Str::slug($nameForSlug);
+            $originalSlug = $slug;
+            $count = 1;
+            while (Attribute::where('slug', $slug)->exists()) {
+                $slug = $originalSlug . '-' . $count;
+                $count++;
+            }
+
             $attribute = Attribute::create([
-                'uuid' => Str::uuid(),
+                // 'uuid' => Str::uuid(), // Model boot method handles UUID generation
                 'name' => $validated['name'],
-                'slug' => Str::slug($validated['name']['en'] ?? $validated['name'][app()->getLocale()] ?? reset($validated['name'])),
+                'slug' => $slug,
                 'type' => $validated['type'],
                 'is_active' => $validated['is_active'],
             ]);
 
             if ($request->type === 'select' && $request->has('options')) {
                 foreach ($request->options as $index => $optionJson) {
-                    $optionValue = json_decode($optionJson, true);
+                    $optionData = json_decode($optionJson, true);
+                    
+                    if (json_last_error() !== JSON_ERROR_NONE) {
+                        continue; // Skip invalid JSON
+                    }
+
+                    // Support new format {value: {...}, order: 0} and fallback to old format
+                    $value = isset($optionData['value']) ? $optionData['value'] : $optionData;
+                    $order = isset($optionData['order']) ? $optionData['order'] : $index;
+
                     $attribute->options()->create([
-                        'value' => $optionValue,
-                        'order' => $index
+                        'value' => $value,
+                        'order' => $order
                     ]);
                 }
             }
+
+            DB::commit();
 
             notify()->success(t_db('general', 'attribute_added_successfully'));
             return redirect()->route('attributes.index');
 
         } catch (\Exception $e) {
+            DB::rollBack();
             \Log::error('Attribute store failed: ' . $e->getMessage());
             notify()->error(t_db('general', 'something_went_wrong'));
             return back()->withInput();
@@ -101,26 +125,40 @@ class AttributesController extends Controller
             ]);
 
             if ($request->type === 'select') {
-                // Mövcud opsiyaları silib yenilərini yazmaq ən sadə yoldur (və ya sync məntiqi qura bilərik)
-                // Sadəlik üçün silib yenidən yaradacam (amma ID-lər dəyişəcək, diqqətli olmaq lazımdır)
-                // Daha yaxşı yanaşma: gələn opsiyaların ID-si varsa update, yoxsa create.
-                
-                // Bu nümunədə sadə saxlayıram:
-                $attribute->options()->delete();
+                $existingIds = $attribute->options()->pluck('id')->toArray();
+                $keptIds = [];
+
                 if ($request->has('options')) {
                     foreach ($request->options as $index => $optionJson) {
-                         $optionValue = json_decode($optionJson, true);
-                         // Bəzən string kimi gələ bilər, yoxlamaq lazımdır
-                         if (!is_array($optionValue)) {
-                             // Əgər birbaşa massiv gəlibsə (JS tərəfdən asılıdır)
-                             $optionValue = $optionJson; 
-                         }
+                        $optionData = json_decode($optionJson, true);
+                        
+                        // Support new format {id: 1, value: {...}, order: 0} and fallback
+                        $id = $optionData['id'] ?? null;
+                        $value = $optionData['value'] ?? $optionData;
+                        $order = $optionData['order'] ?? $index;
 
-                        $attribute->options()->create([
-                            'value' => $optionValue,
-                            'order' => $index
-                        ]);
+                        if ($id && in_array($id, $existingIds)) {
+                            // Update existing option
+                            $attribute->options()->where('id', $id)->update([
+                                'value' => $value,
+                                'order' => $order
+                            ]);
+                            $keptIds[] = $id;
+                        } else {
+                            // Create new option
+                            $newOption = $attribute->options()->create([
+                                'value' => $value,
+                                'order' => $order
+                            ]);
+                            $keptIds[] = $newOption->id;
+                        }
                     }
+                }
+                
+                // Delete removed options (only ones that were not in the submitted list)
+                // This preserves IDs for existing options and avoids breaking foreign keys
+                if (!empty($existingIds)) {
+                    $attribute->options()->whereIn('id', $existingIds)->whereNotIn('id', $keptIds)->delete();
                 }
             }
 

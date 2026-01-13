@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AnnouncementStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,6 +19,7 @@ class Announcement extends Model
         'has_delivery' => 'boolean',
         'published_at' => 'datetime',
         'expires_at' => 'datetime',
+        'status' => AnnouncementStatus::class,
     ];
 
     protected static function boot()
@@ -56,5 +58,24 @@ class Announcement extends Model
     public function mainImage()
     {
         return $this->hasOne(AnnouncementImage::class)->where('is_main', true);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function activePackages()
+    {
+        return $this->belongsToMany(Package::class, 'announcement_packages')
+                    ->withPivot('starts_at', 'ends_at')
+                    ->wherePivot('ends_at', '>', now())
+                    ->wherePivot('starts_at', '<=', now())
+                    ->whereNull('announcement_packages.deleted_at');
+    }
+
+    public function announcementPackages()
+    {
+        return $this->hasMany(AnnouncementPackage::class);
     }
 }

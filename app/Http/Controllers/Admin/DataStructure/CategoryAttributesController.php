@@ -41,7 +41,7 @@ class CategoryAttributesController extends Controller
     public function edit(string $uuid)
     {
         $category = Category::where('uuid', $uuid)->firstOrFail();
-        $attributes = Attribute::IsActive()->get();
+        $attributes = Attribute::all();
         $categoryAttributes = CategoryAttribute::where('category_uuid', $uuid)->get();
 
         return view('admin-dashboard.data-structure.category-attributes.edit', compact('category', 'attributes', 'categoryAttributes'));

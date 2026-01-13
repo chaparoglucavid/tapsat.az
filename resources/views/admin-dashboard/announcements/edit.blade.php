@@ -16,7 +16,7 @@
                     </div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('announcements.update', $announcement->uuid) }}">
+                        <form method="POST" action="{{ route('announcements.update', $announcement->uuid) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
@@ -51,11 +51,29 @@
                                 <div class="col-md-6">
                                     <label class="form-label">{{ t_db('general', 'status') }}</label>
                                     <select name="status" class="form-select" required>
-                                        <option value="pending" {{ $announcement->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="active" {{ $announcement->status == 'active' ? 'selected' : '' }}>Active</option>
-                                        <option value="rejected" {{ $announcement->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                                        <option value="sold" {{ $announcement->status == 'sold' ? 'selected' : '' }}>Sold</option>
+                                        @foreach(\App\Enums\AnnouncementStatus::cases() as $status)
+                                            <option value="{{ $status->value }}" {{ $announcement->status->value == $status->value ? 'selected' : '' }}>
+                                                {{ $status->label() }}
+                                            </option>
+                                        @endforeach
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">{{ t_db('general', 'packages') }}</label>
+                                <div class="d-flex gap-3 flex-wrap">
+                                    @php
+                                        $activePackageIds = $announcement->activePackages->pluck('id')->toArray();
+                                    @endphp
+                                    @foreach($packages as $package)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="packages[]" value="{{ $package->id }}" id="package_{{ $package->id }}" {{ in_array($package->id, $activePackageIds) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="package_{{ $package->id }}">
+                                                {{ $package->getTranslation('name', app()->getLocale()) }} ({{ $package->duration_days }} {{ t_db('general', 'days') }})
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
 
@@ -110,7 +128,7 @@
     </div>
 @endsection
 
-@push('css')
+@section('css-code')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" rel="stylesheet" />
     <style>
         .dropzone {
@@ -119,9 +137,9 @@
             background: #fdfdfd;
         }
     </style>
-@endpush
+@endsection
 
-@push('js')
+@section('js-code')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     <script>
         Dropzone.autoDiscover = false;
@@ -153,8 +171,8 @@
                      headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
                      type: 'DELETE',
                      url: '{{ route('media.revert') }}',
-                     data: name,
-                     dataType: 'html'
+                     data: {filename: name},
+                     dataType: 'json'
                  });
             },
             init: function () {
@@ -182,4 +200,4 @@
             }
         });
     </script>
-@endpush
+@endsection

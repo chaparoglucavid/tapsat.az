@@ -136,7 +136,7 @@
                 const optionHtml = `
                     <div class="row mb-2 option-item">
                         @foreach($languages as $lang)
-                            <div class="col-md-{{ 12 / count($languages) }}">
+                            <div class="col-md-{{ floor(11 / count($languages)) }}">
                                 <input type="text" name="temp_options[${optionCount}][{{ $lang->code }}]" class="form-control" placeholder="Option ({{ strtoupper($lang->code) }})" required>
                             </div>
                         @endforeach
@@ -162,7 +162,7 @@
             document.querySelector('form').addEventListener('submit', function(e) {
                 if (typeSelect.value === 'select') {
                     const optionItems = document.querySelectorAll('.option-item');
-                    optionItems.forEach(item => {
+                    optionItems.forEach((item, index) => {
                         const inputs = item.querySelectorAll('input[name^="temp_options"]');
                         const finalInput = item.querySelector('.final-option-input');
                         const valueObj = {};
@@ -172,7 +172,12 @@
                             valueObj[langCode] = input.value;
                         });
                         
-                        finalInput.value = JSON.stringify(valueObj);
+                        const finalData = {
+                            value: valueObj,
+                            order: index
+                        };
+
+                        finalInput.value = JSON.stringify(finalData);
                     });
                 }
             });
