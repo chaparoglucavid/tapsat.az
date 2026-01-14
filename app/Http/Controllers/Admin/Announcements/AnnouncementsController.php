@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Admin\Announcements;
 use App\Enums\AnnouncementStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
-use App\Models\AnnouncementAttributeValue;
 use App\Models\AnnouncementImage;
 use App\Models\AnnouncementPackage;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\ComplaintSubject;
 use App\Models\Package;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Enum;
@@ -46,29 +48,26 @@ class AnnouncementsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'city_id' => 'required|exists:cities,id',
             'user_id' => 'required|exists:users,id',
-            'is_new' => 'boolean',
-            'has_delivery' => 'boolean',
             'status' => ['required', new Enum(AnnouncementStatus::class)],
-            'attributes' => 'nullable|array', // Dinamik atributlar
             'images' => 'nullable|array',
             'images.*' => 'string',
             'packages' => 'nullable|array',
             'packages.*' => 'exists:packages,id'
         ]);
 
-        try {
+        // try {
+            DB::beginTransaction();
             $announcement = Announcement::create([
                 'uuid' => Str::uuid(),
                 'user_id' => $validated['user_id'],
                 'category_id' => $validated['category_id'],
                 'city_id' => $validated['city_id'],
-                'title' => $validated['title'],
+                'title' => NULL,
                 'description' => $validated['description'],
                 'price' => $validated['price'],
                 'is_new' => $request->has('is_new'),
@@ -93,20 +92,7 @@ class AnnouncementsController extends Controller
                 }
             }
 
-            // Atribut dəyərlərini yadda saxla
-            if ($request->has('attributes')) {
-                foreach ($request->attributes as $attributeId => $value) {
-                    // Dəyər boşdursa yazmayaq
-                    if (empty($value)) continue;
-
-                    AnnouncementAttributeValue::create([
-                        'announcement_id' => $announcement->id,
-                        'attribute_id' => $attributeId,
-                        'value' => is_array($value) ? json_encode($value) : $value, // Multiselect olsa JSON saxlayacaq
-                        // Əgər select tipdirsə və ID gəlirsə option_id-ə yaza bilərik, hələlik value saxlayırıq
-                    ]);
-                }
-            }
+            
 
             // Handle Images
             if ($request->has('images')) {
@@ -125,14 +111,17 @@ class AnnouncementsController extends Controller
                 }
             }
 
+            DB::commit();
+
             notify()->success(t_db('general', 'announcement_added_successfully'));
             return redirect()->route('announcements.index');
 
-        } catch (\Exception $e) {
-            \Log::error('Announcement store failed: ' . $e->getMessage());
-            notify()->error(t_db('general', 'something_went_wrong'));
-            return back()->withInput();
-        }
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     Log::error('Announcement store failed: ' . $e->getMessage());
+        //     notify()->error(t_db('general', 'something_went_wrong'));
+        //     return back()->withInput();
+        // }
     }
 
     /**
@@ -140,7 +129,13 @@ class AnnouncementsController extends Controller
      */
     public function show(string $uuid)
     {
-        //
+        $announcement = Announcement::with(['category', 'city', 'user', 'images', 'complaints.subject'])
+            ->where('uuid', $uuid)
+            ->firstOrFail();
+
+        $complaintSubjects = ComplaintSubject::all();
+
+        return view('admin-dashboard.announcements.show', compact('announcement', 'complaintSubjects'));
     }
 
     /**
@@ -170,12 +165,16 @@ class AnnouncementsController extends Controller
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'city_id' => 'required|exists:cities,id',
-            'is_new' => 'boolean',
-            'has_delivery' => 'boolean',
             'status' => ['required', new Enum(AnnouncementStatus::class)],
+            'rejection_reason' => 'nullable|string|required_if:status,rejected',
             'packages' => 'nullable|array',
             'packages.*' => 'exists:packages,id'
         ]);
+
+        $rejectionReason = null;
+        if ($validated['status'] === AnnouncementStatus::REJECTED->value) {
+            $rejectionReason = $validated['rejection_reason'] ?? null;
+        }
 
         try {
             $announcement->update([
@@ -187,6 +186,7 @@ class AnnouncementsController extends Controller
                 'is_new' => $request->has('is_new'),
                 'has_delivery' => $request->has('has_delivery'),
                 'status' => $validated['status'],
+                'rejection_reason' => $rejectionReason,
             ]);
 
             // Handle Packages

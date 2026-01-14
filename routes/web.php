@@ -17,9 +17,8 @@ use App\Http\Controllers\Admin\Addresses\{
 
 use App\Http\Controllers\Admin\DataStructure\{
     CategoriesController,
-    CategoryAttributesController,
     CategoryPackagePricesController,
-    AttributesController
+    ComplaintSubjectsController
 };
 
 use App\Http\Controllers\Admin\Packages\{
@@ -27,12 +26,16 @@ use App\Http\Controllers\Admin\Packages\{
 };
 
 use App\Http\Controllers\Admin\Announcements\{
-    AnnouncementsController
+    AnnouncementsController,
+    AnnouncementComplaintsController,
+    ComplaintsAdminController
 };
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\UserCreditCardsController;
-
-
+use App\Http\Controllers\Admin\Security\{
+    SuspiciousActivitiesController,
+    IpRulesController
+};
 use App\Http\Controllers\Admin\MediaController;
 
 Route::get('/', function () {
@@ -53,15 +56,11 @@ Route::middleware('auth:web')->group(function () {
     Route::resource('regions', RegionsController::class);
     //categories
     Route::resource('categories', CategoriesController::class);
+    //complaint-subjects
+    Route::resource('complaint-subjects', ComplaintSubjectsController::class)->except(['show']);
 
     //category-package-prices
     Route::resource('category-package-prices', CategoryPackagePricesController::class)->only(['index', 'update']);
-
-    //attributes
-    Route::resource('attributes', AttributesController::class);
-
-    //category-attributes
-    Route::resource('category-attributes', CategoryAttributesController::class)->only(['index', 'edit', 'update']);
 
     //media
     Route::post('media/upload', [MediaController::class, 'upload'])->name('media.upload');
@@ -69,6 +68,8 @@ Route::middleware('auth:web')->group(function () {
 
     //announcements
     Route::resource('announcements', AnnouncementsController::class);
+    Route::post('announcements/{uuid}/complaints', [AnnouncementComplaintsController::class, 'store'])->name('announcements.complaints.store');
+    Route::get('announcements-complaints', [ComplaintsAdminController::class, 'index'])->name('announcements.complaints.index');
 
     //users
     Route::resource('users', UsersController::class);
@@ -91,6 +92,11 @@ Route::middleware('auth:web')->group(function () {
         ->name('translations.update');
     Route::post('translations/update-all/{language}', [TranslationsController::class, 'updateAll'])
         ->name('translations.update-all');
+
+    //security
+    Route::get('security/suspicious-activities', [SuspiciousActivitiesController::class, 'index'])
+        ->name('security.suspicious-activities.index');
+    Route::resource('ip-rules', IpRulesController::class)->except(['show']);
 
     Route::post('clear-cache', [DashboardController::class, 'clearCache'])->name('clear-cache');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

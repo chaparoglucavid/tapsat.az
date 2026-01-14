@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->json('name');
-            $table->decimal('price', 10, 2);
+            $table->integer('duration_days')->default(15);
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();

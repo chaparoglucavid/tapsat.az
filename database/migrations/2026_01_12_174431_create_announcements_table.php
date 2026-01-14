@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();
             
             // Common Info
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->decimal('price', 12, 2);
             $table->string('currency', 3)->default('AZN'); // AZN, USD
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->boolean('has_delivery')->default(false); // Çatdırılma
             
             // Status & Meta
-            $table->enum('status', ['pending', 'active', 'rejected', 'expired', 'sold'])->default('pending');
+            $table->enum('status', ['pending','accepted','inactive','expired','rejected'])->default('pending');
             $table->text('rejection_reason')->nullable();
             $table->integer('view_count')->default(0);
             

@@ -90,10 +90,5 @@ class Category extends Model
             ->withTimestamps();
     }
 
-    public function attributes()
-    {
-        return $this->belongsToMany(Attribute::class, 'category_attributes', 'category_uuid', 'attribute_id', 'uuid', 'id')
-            ->withPivot('is_required', 'is_filterable')
-            ->withTimestamps();
-    }
+    
 }

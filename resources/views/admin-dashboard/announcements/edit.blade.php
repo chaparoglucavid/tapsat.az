@@ -60,6 +60,13 @@
                                 </div>
                             </div>
 
+                            <div class="row mb-4" id="rejection_reason_wrapper">
+                                <div class="col-md-12">
+                                    <label class="form-label">{{ t_db('general', 'rejection_reason') }}</label>
+                                    <textarea name="rejection_reason" class="form-control" rows="3">{{ old('rejection_reason', $announcement->rejection_reason) }}</textarea>
+                                </div>
+                            </div>
+
                             <div class="mb-4">
                                 <label class="form-label">{{ t_db('general', 'packages') }}</label>
                                 <div class="d-flex gap-3 flex-wrap">
@@ -198,6 +205,24 @@
                     }
                 @endif
             }
+        });
+
+        function toggleRejectionReason() {
+            var status = $('select[name="status"]').val();
+            var wrapper = $('#rejection_reason_wrapper');
+            var textarea = $('textarea[name="rejection_reason"]');
+            if (status === '{{ \App\Enums\AnnouncementStatus::REJECTED->value }}') {
+                wrapper.show();
+                textarea.attr('required', 'required');
+            } else {
+                wrapper.hide();
+                textarea.removeAttr('required');
+            }
+        }
+
+        $(function () {
+            toggleRejectionReason();
+            $('select[name="status"]').on('change', toggleRejectionReason);
         });
     </script>
 @endsection

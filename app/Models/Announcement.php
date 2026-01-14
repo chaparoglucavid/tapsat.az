@@ -45,11 +45,6 @@ class Announcement extends Model
         return $this->belongsTo(City::class);
     }
 
-    public function attributeValues()
-    {
-        return $this->hasMany(AnnouncementAttributeValue::class);
-    }
-
     public function images()
     {
         return $this->hasMany(AnnouncementImage::class)->orderBy('order');
@@ -77,5 +72,10 @@ class Announcement extends Model
     public function announcementPackages()
     {
         return $this->hasMany(AnnouncementPackage::class);
+    }
+
+    public function complaints()
+    {
+        return $this->hasMany(AnnouncementComplaint::class);
     }
 }

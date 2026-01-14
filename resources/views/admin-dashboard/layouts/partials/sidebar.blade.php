@@ -120,11 +120,23 @@
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">{{ t_db('general', 'announcements') }}</span>
         </li>
-        <li class="menu-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
-            <a href="{{ route('announcements.index') }}" class="menu-link">
+        <li class="menu-item {{ menuOpen(['announcements.*', 'announcements.complaints.*']) }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-detail"></i>
-                <div class="text-truncate" data-i18n="{{ t_db('general', 'announcements') }}">{{ t_db('general', 'announcements') }}</div>
+                <div class="text-truncate">{{ t_db('general', 'announcements') }}</div>
             </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('announcements.index') ? 'active' : '' }}">
+                    <a href="{{ route('announcements.index') }}" class="menu-link">
+                        <div class="text-truncate">{{ t_db('general', 'announcements') }}</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('announcements.complaints.index') ? 'active' : '' }}">
+                    <a href="{{ route('announcements.complaints.index') }}" class="menu-link">
+                        <div class="text-truncate">{{ t_db('general', 'complaints') }}</div>
+                    </a>
+                </li>
+            </ul>
         </li>
 
         <!-- Data Structure -->
@@ -138,22 +150,16 @@
                 <div class="text-truncate" data-i18n="{{ t_db('general', 'categories') }}">{{ t_db('general', 'categories') }}</div>
             </a>
         </li>
+        <li class="menu-item {{ request()->routeIs('complaint-subjects.*') ? 'active' : '' }}">
+            <a href="{{ route('complaint-subjects.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-flag"></i>
+                <div class="text-truncate">{{ t_db('general', 'complaint_subjects') }}</div>
+            </a>
+        </li>
         <li class="menu-item {{ request()->routeIs('category-package-prices.*') ? 'active' : '' }}">
             <a href="{{ route('category-package-prices.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div class="text-truncate" data-i18n="{{ t_db('general', 'category_package_prices') }}">{{ t_db('general', 'package_prices') }}</div>
-            </a>
-        </li>
-        <li class="menu-item {{ request()->routeIs('attributes.*') ? 'active' : '' }}">
-            <a href="{{ route('attributes.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div class="text-truncate" data-i18n="{{ t_db('general', 'attributes') }}">{{ t_db('general', 'attributes') }}</div>
-            </a>
-        </li>
-        <li class="menu-item {{ request()->routeIs('category-attributes.*') ? 'active' : '' }}">
-            <a href="{{ route('category-attributes.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div class="text-truncate" data-i18n="{{ t_db('general', 'category_attributes') }}">{{ t_db('general', 'category_attributes') }}</div>
             </a>
         </li>
         <li class="menu-item {{ request()->routeIs('packages.*') ? 'active' : '' }}">
@@ -265,7 +271,7 @@
             </ul>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ menuOpen(['security.suspicious-activities.index', 'ip-rules.*']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">{{ t_db('general', 'security') }}</div>
@@ -277,14 +283,14 @@
                         <div data-i18n="Without menu">{{ t_db('general', 'login_logs') }}</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">{{ t_db('general', 'suspicious_activities') }}</div>
+                <li class="menu-item {{ request()->routeIs('security.suspicious-activities.index') ? 'active' : '' }}">
+                    <a href="{{ route('security.suspicious-activities.index') }}" class="menu-link">
+                        <div>{{ t_db('general', 'suspicious_activities') }}</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">{{ t_db('general', 'ip_management') }}</div>
+                <li class="menu-item {{ request()->routeIs('ip-rules.*') ? 'active' : '' }}">
+                    <a href="{{ route('ip-rules.index') }}" class="menu-link">
+                        <div>{{ t_db('general', 'ip_management') }}</div>
                     </a>
                 </li>
             </ul>

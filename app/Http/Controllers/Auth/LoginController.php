@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Spatie\Activitylog\Models\Activity;
 
 class LoginController extends Controller
 {
@@ -93,6 +94,17 @@ class LoginController extends Controller
                     'locked_until' => now()->addMinutes(3)
                 ]);
 
+                activity()
+                    ->useLog('security')
+                    ->event('login_failed')
+                    ->withProperties([
+                        'email' => $email,
+                        'ip' => $ip,
+                        'user_agent' => $request->userAgent(),
+                        'reason' => 'account_locked'
+                    ])
+                    ->log('Suspicious login attempt');
+
                 return response()->json([
                     'status' => false,
                     'attempts_left' => 0,
@@ -105,6 +117,17 @@ class LoginController extends Controller
         } else {
             $attemptsLeft = null;
         }
+
+        activity()
+            ->useLog('security')
+            ->event('login_failed')
+            ->withProperties([
+                'email' => $email,
+                'ip' => $ip,
+                'user_agent' => $request->userAgent(),
+                'reason' => 'invalid_credentials'
+            ])
+            ->log('Suspicious login attempt');
 
         return response()->json([
             'status' => false,

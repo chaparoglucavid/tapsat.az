@@ -32,6 +32,8 @@ class DatabaseSeeder extends Seeder
             CitiesSeeder::class,
             RegionsSeeder::class,
             CategoriesSeeder::class,
+            PackageSeeder::class,
+            ComplaintSubjectSeeder::class,
         ]);
     }
 }

@@ -20,7 +20,7 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>{{ t_db('general', 'image') }}</th>
+                <th>{{ t_db('general', 'owner') }}</th>
                 <th>{{ t_db('general', 'title') }}</th>
                 <th>{{ t_db('general', 'category') }}</th>
                 <th>{{ t_db('general', 'price') }}</th>
@@ -32,13 +32,7 @@
             @forelse($announcements as $announcement)
                 <tr>
                     <td> {{ $loop->iteration }} </td>
-                    <td>
-                        @if($announcement->mainImage)
-                            <img src="{{ asset('storage/' . $announcement->mainImage->path) }}" alt="img" class="rounded" width="50" height="50">
-                        @else
-                            <span class="badge bg-label-secondary">No Image</span>
-                        @endif
-                    </td>
+                    <td>{{ $announcement->user->name }}</td>
                     <td>{{ $announcement->title }}</td>
                     <td>{{ $announcement->category->getTranslation('name', app()->getLocale()) }}</td>
                     <td>{{ $announcement->price }} {{ $announcement->currency }}</td>
@@ -47,9 +41,13 @@
                             {{ $announcement->status->label() }}
                         </span>
                     </td>
-                    <td class="d-flex align-items-center">
+                    <td class="d-flex align-items-center gap-1">
+                        <a href="{{ route('announcements.show', $announcement->uuid) }}" class="btn btn-icon"
+                           title="{{ t_db('general', 'show') }}">
+                            <i class="icon-base bx bx-show icon-sm"></i>
+                        </a>
                         <a href="{{ route('announcements.edit', $announcement->uuid) }}" class="btn btn-icon item-edit"
-                           title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i>
+                           title="{{ t_db('general', 'edit') }}"><i class="icon-base bx bx-edit icon-sm"></i>
                         </a>
                         <form action="{{ route('announcements.destroy', $announcement->uuid) }}" method="POST" onsubmit="return confirm('{{ t_db('general', 'are_you_sure') }}');">
                             @csrf
@@ -68,6 +66,7 @@
                 </tr>
             @endforelse
             </tbody>
+            @if(count($announcements) > 20)
             <tfoot>
                 <tr>
                     <td colspan="7">
@@ -75,6 +74,7 @@
                     </td>
                 </tr>
             </tfoot>
+            @endif
         </table>
     </div>
 </div>

@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('announcement_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('package_id')->nullable()->constrained()->onDelete('set null');
+            $table->string('transaction_id')->nullable();
             $table->decimal('amount', 10, 2);
             $table->string('currency')->default('AZN');
             $table->string('payment_method')->nullable();
-            $table->string('transaction_id')->nullable();
             $table->string('status')->default('pending'); // pending, completed, failed, refunded
             $table->text('description')->nullable();
             $table->json('payload')->nullable();

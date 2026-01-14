@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AnnouncementAttributeValue extends Model
+class AnnouncementComplaint extends Model
 {
     use HasFactory;
 
@@ -16,13 +16,9 @@ class AnnouncementAttributeValue extends Model
         return $this->belongsTo(Announcement::class);
     }
 
-    public function attribute()
+    public function subject()
     {
-        return $this->belongsTo(Attribute::class);
-    }
-
-    public function option()
-    {
-        return $this->belongsTo(AttributeOption::class, 'attribute_option_id');
+        return $this->belongsTo(ComplaintSubject::class, 'complaint_subject_id');
     }
 }
+

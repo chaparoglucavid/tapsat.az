@@ -16,6 +16,15 @@
                     </div>
 
                     <div class="card-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <form method="POST" action="{{ route('announcements.store') }}" enctype="multipart/form-data">
                             @csrf
 
@@ -83,11 +92,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">{{ t_db('general', 'title') }}</label>
-                                <input type="text" name="title" class="form-control" value="{{ old('title') }}" required>
-                            </div>
-
-                            <div class="mb-3">
                                 <label class="form-label">{{ t_db('general', 'description') }}</label>
                                 <textarea name="description" class="form-control" rows="4">{{ old('description') }}</textarea>
                             </div>
@@ -108,14 +112,6 @@
                                         <input class="form-check-input" type="checkbox" name="has_delivery" id="has_delivery" {{ old('has_delivery') ? 'checked' : '' }}>
                                         <label class="form-check-label" for="has_delivery">{{ t_db('general', 'has_delivery') }}</label>
                                     </div>
-                                </div>
-                            </div>
-
-                            {{-- Dynamic Attributes Container --}}
-                            <div id="attributes-container" class="mb-4">
-                                {{-- Attributes will be loaded here via AJAX --}}
-                                <div class="alert alert-warning">
-                                    {{ t_db('general', 'select_category_to_see_attributes') }}
                                 </div>
                             </div>
 
