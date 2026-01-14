@@ -54,12 +54,22 @@ class TranslationsController extends Controller
             'translations.*' => ['nullable', 'string'],
         ]);
 
-        DB::transaction(function () use ($validated) {
-            foreach ($validated['translations'] as $uuid => $value) {
-                Translation::where('uuid', $uuid)->update(['value' => $value]);
-            }
-        });
+        try {
+            DB::transaction(function () use ($validated) {
+                foreach ($validated['translations'] as $uuid => $value) {
+                    Translation::where('uuid', $uuid)->update(['value' => $value]);
+                }
+            });
 
-        return back()->with('success', t_db('general', 'translations_updated_successfully'));
+            return response()->json([
+                'success' => true,
+                'message' => t_db('general', 'translations_updated_successfully')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -106,6 +106,7 @@
 
 </script>
 @notifyJs
+@stack('js')
 @yield('js-code')
 </body>
 </html>

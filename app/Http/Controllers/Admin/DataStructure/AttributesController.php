@@ -32,6 +32,7 @@ class AttributesController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $validated = $request->validate([
             'name' => 'required|array',
             'name.*' => 'required|string|max:100',
@@ -86,6 +87,7 @@ class AttributesController extends Controller
             return redirect()->route('attributes.index');
 
         } catch (\Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             \Log::error('Attribute store failed: ' . $e->getMessage());
             notify()->error(t_db('general', 'something_went_wrong'));
