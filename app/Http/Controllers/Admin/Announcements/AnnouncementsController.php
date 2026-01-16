@@ -70,10 +70,10 @@ class AnnouncementsController extends Controller
 
         if ($request->owner_type === 'store' && $storeId) {
             $store = Store::find($storeId);
-            $userId = $store->user_id; // Store owner becomes the announcement owner
+            $userId = $store->user_id;
         }
 
-        // try {
+        try {
             DB::beginTransaction();
             $announcement = Announcement::create([
                 'uuid' => Str::uuid(),
@@ -91,7 +91,6 @@ class AnnouncementsController extends Controller
                 'expires_at' => $validated['status'] === AnnouncementStatus::ACCEPTED->value ? now()->addDays(30) : null,
             ]);
 
-            // Handle Packages
             if ($request->has('packages')) {
                 foreach ($request->packages as $packageId) {
                     $package = Package::find($packageId);
@@ -108,7 +107,6 @@ class AnnouncementsController extends Controller
 
             
 
-            // Handle Images
             if ($request->has('images')) {
                 foreach ($request->images as $index => $imageName) {
                     if (Storage::disk('public')->exists('tmp/' . $imageName)) {
@@ -118,7 +116,7 @@ class AnnouncementsController extends Controller
                          AnnouncementImage::create([
                              'announcement_id' => $announcement->id,
                              'path' => $newPath,
-                             'is_main' => $index === 0, // First image is main
+                             'is_main' => $index === 0,
                              'order' => $index
                          ]);
                     }
@@ -130,12 +128,12 @@ class AnnouncementsController extends Controller
             notify()->success(t_db('general', 'announcement_added_successfully'));
             return redirect()->route('announcements.index');
 
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     Log::error('Announcement store failed: ' . $e->getMessage());
-        //     notify()->error(t_db('general', 'something_went_wrong'));
-        //     return back()->withInput();
-        // }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Announcement store failed: ' . $e->getMessage());
+            notify()->error(t_db('general', 'something_went_wrong'));
+            return back()->withInput();
+        }
     }
 
     /**
@@ -203,21 +201,12 @@ class AnnouncementsController extends Controller
                 'rejection_reason' => $rejectionReason,
             ]);
 
-            // Handle Packages
-            // First, deactivate packages not in the list (soft delete or set ends_at to now)
-            // But we used soft deletes in AnnouncementPackage model.
-            // Let's get current active packages ids
             $currentPackageIds = $announcement->activePackages->pluck('id')->toArray();
             
             if ($request->has('packages')) {
                 $submittedPackageIds = $request->packages;
                 
-                // Add new packages
                 foreach ($submittedPackageIds as $packageId) {
-                     // Check if already active
-                     // We need to check against activePackages relation but that returns Package models.
-                     // The pivot is what we need to check or just check existence.
-                     // Simplification: just add if not currently active.
                      $alreadyActive = $announcement->activePackages()->where('package_id', $packageId)->exists();
                      
                      if (!$alreadyActive) {
@@ -233,18 +222,8 @@ class AnnouncementsController extends Controller
                      }
                 }
 
-                // Note: We are not removing packages here because packages usually expire or are explicitly removed.
-                // If the user unchecks a package, should we remove it?
-                // The prompt says "daxil etdiyimiz paketleri goster".
-                // If I uncheck, it implies I want to remove it.
-                // However, user might have paid for it.
-                // For admin panel, we assume admin has power.
-                // Let's implement removal logic too.
-                
-                // Find packages that are active but not in submitted list
                 foreach ($announcement->activePackages as $activePkg) {
                     if (!in_array($activePkg->id, $submittedPackageIds)) {
-                         // Find the pivot record and delete it
                          $announcement->announcementPackages()
                              ->where('package_id', $activePkg->id)
                              ->whereNull('deleted_at')
@@ -252,15 +231,12 @@ class AnnouncementsController extends Controller
                     }
                 }
             } else {
-                // If no packages submitted, remove all active
                  $announcement->announcementPackages()->delete();
             }
 
-            // Handle Images
             if ($request->has('images')) {
                 $submittedImages = $request->images;
                 
-                // 1. Delete images not in the submitted list
                 $currentImages = $announcement->images;
                 foreach ($currentImages as $image) {
                     $basename = basename($image->path);
@@ -270,7 +246,6 @@ class AnnouncementsController extends Controller
                     }
                 }
 
-                // 2. Add new images and update order
                 foreach ($submittedImages as $index => $imageName) {
                     if (Storage::disk('public')->exists('tmp/' . $imageName)) {
                         $newPath = 'announcements/' . $announcement->id . '/' . $imageName;
@@ -283,7 +258,6 @@ class AnnouncementsController extends Controller
                             'order' => $index
                         ]);
                     } else {
-                        // Update existing image order/main status
                         $img = AnnouncementImage::where('announcement_id', $announcement->id)
                                 ->where('path', 'like', '%' . $imageName)
                                 ->first();
@@ -297,21 +271,17 @@ class AnnouncementsController extends Controller
                     }
                 }
             } else {
-                // Remove all images if none submitted
                 foreach ($announcement->images as $image) {
                     Storage::disk('public')->delete($image->path);
                     $image->delete();
                 }
             }
 
-            // Atribut yeniləməsi hələlik sadə saxlayıram, çünki kateqoriya dəyişərsə atributlar da dəyişir.
-            // Bu hissə daha mürəkkəb JS tələb edir (AJAX ilə atributları yükləmək).
-
             notify()->success(t_db('general', 'announcement_updated_successfully'));
             return redirect()->route('announcements.index');
 
         } catch (\Exception $e) {
-            \Log::error('Announcement update failed: ' . $e->getMessage());
+            Log::error('Announcement update failed: ' . $e->getMessage());
             notify()->error(t_db('general', 'something_went_wrong'));
             return back()->withInput();
         }

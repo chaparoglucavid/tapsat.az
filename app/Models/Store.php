@@ -52,6 +52,11 @@ class Store extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class);
+    }
+
     public function scopePending($query)
     {
         return $query->where('status', 'pending');

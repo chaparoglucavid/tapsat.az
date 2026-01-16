@@ -21,11 +21,22 @@
           class="template-customizer-theme-css"/>
     <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}"/>
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}"/>
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/apex-charts/apex-charts.css') }}"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('css-code')
     <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('assets/js/config.js') }}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" rel="stylesheet" />
+    <style>
+        .dropzone {
+            border: 2px dashed #d9dee3;
+            border-radius: 0.5rem;
+            background: #fdfdfd;
+            min-height: 150px;
+            padding: 20px;
+        }
+    </style>
     @notifyCss
 </head>

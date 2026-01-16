@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Enums\UserType;
+use App\Enums\AnnouncementStatus;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -65,5 +66,44 @@ class UsersController extends Controller
 
         notify()->success(t_db('general', 'user_deleted_successfully'));
         return redirect()->route('users.index');
+    }
+
+    public function ban(Request $request, string $uuid)
+    {
+        $user = User::where('uuid', $uuid)->firstOrFail();
+        
+        if ($user->type === UserType::ADMIN) {
+            return response()->json(['message' => t_db('general', 'cannot_ban_admin')], 403);
+        }
+
+        $duration = $request->input('duration');
+        
+        if ($duration === 'permanent') {
+            $user->update(['banned_until' => now()->addYears(100)]);
+        } else {
+            $days = (int) $duration;
+            if ($days > 0) {
+                $user->update(['banned_until' => now()->addDays($days)]);
+            }
+        }
+
+        // Deactivate all active announcements
+        $user->announcements()->where('status', AnnouncementStatus::ACCEPTED->value)->update([
+            'status' => AnnouncementStatus::INACTIVE->value
+        ]);
+
+        return response()->json(['message' => t_db('general', 'user_banned_successfully')]);
+    }
+
+    public function unban(string $uuid)
+    {
+        $user = User::where('uuid', $uuid)->firstOrFail();
+        $user->update(['banned_until' => null]);
+
+        // Optional: We might want to reactivate announcements or leave them inactive for manual review
+        // For now, let's leave them as is, or we can restore them if needed. 
+        // Usually, unbanning doesn't automatically republish content to avoid spam.
+
+        return response()->json(['message' => t_db('general', 'user_unbanned_successfully')]);
     }
 }

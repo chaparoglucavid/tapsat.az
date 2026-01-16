@@ -15,8 +15,16 @@
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-md-3">
-                                <strong>{{ t_db('general', 'user') }}:</strong>
-                                <div>{{ $announcement->user->name }}</div>
+                                <strong>{{ t_db('general', 'owner') }}:</strong>
+                                <div>
+                                    @if($announcement->store)
+                                        <span class="badge bg-label-info me-1">{{ t_db('general', 'store') }}</span>
+                                        {{ $announcement->store->store_name }}
+                                    @else
+                                        <span class="badge bg-label-primary me-1">{{ t_db('general', 'user') }}</span>
+                                        {{ $announcement->user->name ?? '-' }}
+                                    @endif
+                                </div>
                             </div>
                             <div class="col-md-3">
                                 <strong>{{ t_db('general', 'category') }}:</strong>

@@ -12,7 +12,15 @@ class UserCreditCard extends Model
         'card_number',
         'expiration_date',
         'cvv',
-        'is_default'
+        'is_default',
+        'is_active'
+    ];
+
+    protected $casts = [
+        'is_default' => 'boolean',
+        'is_active' => 'boolean',
+        'card_number' => 'encrypted',
+        'cvv' => 'encrypted'
     ];
 
     public function user()

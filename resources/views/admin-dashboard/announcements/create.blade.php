@@ -180,19 +180,7 @@
     </div>
 @endsection
 
-@section('css-code')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" rel="stylesheet" />
-    <style>
-        .dropzone {
-            border: 2px dashed #d9dee3;
-            border-radius: 0.5rem;
-            background: #fdfdfd;
-        }
-    </style>
-@endsection
-
 @section('js-code')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Toggle Owner Selection
@@ -201,65 +189,57 @@
             const userContainer = document.getElementById('user_select_container');
             const storeContainer = document.getElementById('store_select_container');
 
-            function toggleOwnerSection() {
-                if (userRadio.checked) {
-                    userContainer.classList.remove('d-none');
-                    storeContainer.classList.add('d-none');
-                } else {
-                    userContainer.classList.add('d-none');
-                    storeContainer.classList.remove('d-none');
+            if (userRadio && storeRadio && userContainer && storeContainer) {
+                function toggleOwnerSection() {
+                    if (userRadio.checked) {
+                        userContainer.classList.remove('d-none');
+                        storeContainer.classList.add('d-none');
+                    } else {
+                        userContainer.classList.add('d-none');
+                        storeContainer.classList.remove('d-none');
+                    }
                 }
-            }
 
-            userRadio.addEventListener('change', toggleOwnerSection);
-            storeRadio.addEventListener('change', toggleOwnerSection);
+                userRadio.addEventListener('change', toggleOwnerSection);
+                storeRadio.addEventListener('change', toggleOwnerSection);
+                toggleOwnerSection();
+            }
 
             Dropzone.autoDiscover = false;
-        
-            var uploadedDocumentMap = {}
-        var myDropzone = new Dropzone("#document-dropzone", {
-            url: "{{ route('media.upload') }}",
-            maxFilesize: 5, // MB
-            addRemoveLinks: true,
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-            },
-            success: function (file, response) {
-                $('form').append('<input type="hidden" name="images[]" value="' + response.name + '">')
-                uploadedDocumentMap[file.name] = response.name
-            },
-            removedfile: function (file) {
-                file.previewElement.remove()
-                var name = ''
-                if (typeof file.file_name !== 'undefined') {
-                    name = file.file_name
-                } else {
-                    name = uploadedDocumentMap[file.name]
-                }
-                $('form').find('input[name="images[]"][value="' + name + '"]').remove()
-                
-                // Optional: Send request to delete from server
-                 $.ajax({
-                     headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
-                     type: 'DELETE',
-                     url: '{{ route('media.revert') }}',
-                     data: {filename: name},
-                     dataType: 'json'
-                 });
-            },
-            init: function () {
-                @if(isset($announcement) && $announcement->images)
-                    var files = {!! json_encode($announcement->images) !!}
-                    for (var i in files) {
-                        var file = files[i]
-                        this.options.addedfile.call(this, file)
-                        this.options.thumbnail.call(this, file, file.original_url)
-                        file.previewElement.classList.add('dz-complete')
-                        $('form').append('<input type="hidden" name="images[]" value="' + file.file_name + '">')
+
+            var uploadedDocumentMap = {};
+
+            var myDropzone = new Dropzone("#document-dropzone", {
+                url: "{{ route('media.upload') }}",
+                maxFilesize: 5,
+                acceptedFiles: 'image/*',
+                addRemoveLinks: true,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function (file, response) {
+                    $('form').append('<input type="hidden" name="images[]" value="' + response.name + '">');
+                    uploadedDocumentMap[file.name] = response.name;
+                },
+                removedfile: function (file) {
+                    file.previewElement.remove();
+                    var name = '';
+                    if (typeof file.file_name !== 'undefined') {
+                        name = file.file_name;
+                    } else {
+                        name = uploadedDocumentMap[file.name];
                     }
-                @endif
-            }
-        });
+                    $('form').find('input[name="images[]"][value="' + name + '"]').remove();
+
+                    $.ajax({
+                        headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
+                        type: 'DELETE',
+                        url: '{{ route('media.revert') }}',
+                        data: {filename: name},
+                        dataType: 'json'
+                    });
+                }
+            });
     });
     </script>
 @endsection

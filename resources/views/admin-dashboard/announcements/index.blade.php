@@ -21,6 +21,7 @@
             <tr>
                 <th>#</th>
                 <th>{{ t_db('general', 'owner') }}</th>
+                <th>{{ t_db('general', 'type') }}</th>
                 <th>{{ t_db('general', 'title') }}</th>
                 <th>{{ t_db('general', 'category') }}</th>
                 <th>{{ t_db('general', 'price') }}</th>
@@ -32,7 +33,20 @@
             @forelse($announcements as $announcement)
                 <tr>
                     <td> {{ $loop->iteration }} </td>
-                    <td>{{ $announcement->user->name }}</td>
+                    <td>
+                        @if($announcement->store)
+                            {{ $announcement->store->store_name }}
+                        @else
+                            {{ $announcement->user->name ?? '-' }}
+                        @endif
+                    </td>
+                    <td>
+                        @if($announcement->store)
+                            <span class="badge bg-label-info">{{ t_db('general', 'store_product') }}</span>
+                        @else
+                            <span class="badge bg-label-primary">{{ t_db('general', 'user_product') }}</span>
+                        @endif
+                    </td>
                     <td>{{ $announcement->title }}</td>
                     <td>{{ $announcement->category->getTranslation('name', app()->getLocale()) }}</td>
                     <td>{{ $announcement->price }} {{ $announcement->currency }}</td>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Store;
 use App\Models\User;
+use App\Enums\AnnouncementStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -203,6 +204,11 @@ class StoreController extends Controller
                 if ($store->user->store_owner) {
                     $store->user->update(['store_owner' => false]);
                 }
+
+                // Deactivate all active announcements for this store
+                $store->announcements()->where('status', AnnouncementStatus::ACTIVE->value)->update([
+                    'status' => AnnouncementStatus::INACTIVE->value
+                ]);
             } elseif ($request->status === 'confirmed') {
                 $store->rejection_reason = null;
                 // Update User to be store_owner

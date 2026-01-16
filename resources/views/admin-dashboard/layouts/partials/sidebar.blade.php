@@ -236,35 +236,35 @@
             </ul>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ menuOpen(['analytics.*']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">{{ t_db('general', 'analytics_and_reports') }}</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('analytics.general') ? 'active' : '' }}">
+                    <a href="{{ route('analytics.general') }}" class="menu-link">
                         <div data-i18n="Without menu">{{ t_db('general', 'general_statistics') }}</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('analytics.users') ? 'active' : '' }}">
+                    <a href="{{ route('analytics.users') }}" class="menu-link">
                         <div data-i18n="Without navbar">{{ t_db('general', 'user_analytics') }}</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('analytics.announcements') ? 'active' : '' }}">
+                    <a href="{{ route('analytics.announcements') }}" class="menu-link">
                         <div data-i18n="Without navbar">{{ t_db('general', 'announcement_analytics') }}</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('analytics.income') ? 'active' : '' }}">
+                    <a href="{{ route('analytics.income') }}" class="menu-link">
                         <div data-i18n="Without navbar">{{ t_db('general', 'income_analytics') }}</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('analytics.activity') ? 'active' : '' }}">
+                    <a href="{{ route('analytics.activity') }}" class="menu-link">
                         <div data-i18n="Without navbar">{{ t_db('general', 'activity_analytics') }}</div>
                     </a>
                 </li>
@@ -322,7 +322,7 @@
         </li>
 
 
-        <li class="menu-item">
+        <li class="menu-item {{ menuOpen(['system.*']) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">{{ t_db('general', 'system') }}</div>
@@ -330,7 +330,7 @@
 
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
+                    <a href="#" class="menu-link">
                         <div data-i18n="Without menu">{{ t_db('general', 'system_status') }}</div>
                     </a>
                 </li>

@@ -94,16 +94,20 @@
                 </div>
                 <div class="card-footer border-top">
                     <div class="d-flex justify-content-end gap-2">
-                        @if($store->status == 'pending')
+                        @if($store->status != 'confirmed')
                             <button type="button" class="btn btn-outline-success change-status" 
                                     data-uuid="{{ $store->uuid }}" data-status="confirmed">
                                 <i class="bx bx-check"></i> {{ t_db('general', 'confirm') }}
                             </button>
+                        @endif
+                        
+                        @if($store->status != 'rejected')
                             <button type="button" class="btn btn-outline-danger change-status-reject" 
                                     data-uuid="{{ $store->uuid }}">
                                 <i class="bx bx-x"></i> {{ t_db('general', 'reject') }}
                             </button>
                         @endif
+
                         <a href="{{ route('stores.edit', $store->uuid) }}" class="btn btn-warning">
                             <i class="bx bx-edit"></i> {{ t_db('general', 'edit') }}
                         </a>
@@ -114,7 +118,7 @@
 
         {{-- User Info --}}
         <div class="col-md-4 mb-4">
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">{{ t_db('general', 'user_info') }}</h5>
                 </div>
@@ -145,6 +149,44 @@
                     @else
                         <p class="text-muted">{{ t_db('general', 'user_not_found') }}</p>
                     @endif
+                </div>
+            </div>
+
+            {{-- Store Announcements --}}
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ t_db('general', 'announcements') }}</h5>
+                    <span class="badge bg-label-primary">{{ $store->announcements->count() }}</span>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        @forelse($store->announcements as $announcement)
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    @if($announcement->images->first())
+                                        <img src="{{ asset('storage/' . $announcement->images->first()->path) }}" class="rounded me-3" width="50" height="50" style="object-fit: cover">
+                                    @else
+                                        <div class="rounded me-3 d-flex align-items-center justify-content-center bg-label-secondary" style="width: 50px; height: 50px;">
+                                            <i class="bx bx-image"></i>
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <a href="{{ route('announcements.show', $announcement->uuid) }}" class="text-body fw-semibold d-block mb-1 text-truncate" style="max-width: 150px;">
+                                            {{ $announcement->title }}
+                                        </a>
+                                        <small class="text-muted">{{ $announcement->price }} {{ $announcement->currency }}</small>
+                                    </div>
+                                </div>
+                                <span class="badge bg-label-{{ $announcement->status->color() }}">
+                                    {{ $announcement->status->label() }}
+                                </span>
+                            </li>
+                        @empty
+                            <li class="list-group-item text-center text-muted py-4">
+                                {{ t_db('general', 'no_records_found') }}
+                            </li>
+                        @endforelse
+                    </ul>
                 </div>
             </div>
         </div>

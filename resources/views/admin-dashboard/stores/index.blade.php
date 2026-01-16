@@ -46,6 +46,24 @@
                                             <a href="{{ route('stores.edit', $store->uuid) }}" class="btn btn-icon item-edit"
                                                  title="{{t_db('general', 'edit')}}"><i class="icon-base bx bx-edit icon-sm"></i>
                                             </a>
+                                            
+                                            <div class="dropdown">
+                                                <button type="button" class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    @if($store->status != 'confirmed')
+                                                        <a class="dropdown-item change-status" href="javascript:void(0);" data-uuid="{{ $store->uuid }}" data-status="confirmed">
+                                                            <i class="bx bx-check me-1"></i> {{ t_db('general', 'confirm') }}
+                                                        </a>
+                                                    @endif
+                                                    @if($store->status != 'rejected')
+                                                        <a class="dropdown-item change-status-reject" href="javascript:void(0);" data-uuid="{{ $store->uuid }}">
+                                                            <i class="bx bx-x me-1"></i> {{ t_db('general', 'reject') }}
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -59,4 +77,93 @@
             </div>
         </div>
     </div>
+
+    {{-- Reject Modal --}}
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ t_db('general', 'reject_store') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="reject-store-uuid">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="rejection-reason" class="form-label">{{ t_db('general', 'reason') }}</label>
+                            <textarea id="rejection-reason" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{{ t_db('general', 'close') }}</button>
+                    <button type="button" class="btn btn-danger" id="confirm-reject">{{ t_db('general', 'reject') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('js-code')
+<script>
+    $(document).ready(function() {
+        // Confirm Status
+        $(document).on('click', '.change-status', function() {
+            let uuid = $(this).data('uuid');
+            let status = $(this).data('status');
+            
+            Swal.fire({
+                title: "{{ t_db('general', 'are_you_sure') }}",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "{{ t_db('general', 'yes') }}",
+                cancelButtonText: "{{ t_db('general', 'cancel') }}"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    updateStatus(uuid, status);
+                }
+            });
+        });
+
+        // Reject Status
+        $(document).on('click', '.change-status-reject', function() {
+            let uuid = $(this).data('uuid');
+            $('#reject-store-uuid').val(uuid);
+            $('#rejection-reason').val('');
+            $('#rejectModal').modal('show');
+        });
+
+        $('#confirm-reject').click(function() {
+            let uuid = $('#reject-store-uuid').val();
+            let reason = $('#rejection-reason').val();
+
+            if (!reason) {
+                Swal.fire("{{ t_db('general', 'error') }}", "{{ t_db('general', 'enter_reason') }}", "error");
+                return;
+            }
+
+            updateStatus(uuid, 'rejected', reason);
+            $('#rejectModal').modal('hide');
+        });
+
+        function updateStatus(uuid, status, reason = null) {
+            $.ajax({
+                url: '/stores/' + uuid + '/status',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    status: status,
+                    rejection_reason: reason
+                },
+                success: function(response) {
+                    Swal.fire("{{ t_db('general', 'success') }}", response.message, "success")
+                        .then(() => location.reload());
+                },
+                error: function(xhr) {
+                    Swal.fire("{{ t_db('general', 'error') }}", xhr.responseJSON.message, "error");
+                }
+            });
+        }
+    });
+</script>
 @endsection

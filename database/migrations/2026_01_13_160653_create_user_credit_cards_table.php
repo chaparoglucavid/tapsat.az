@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('card_holder_name');
-            $table->string('card_number'); // In real app, this should be tokenized or encrypted.
-            $table->string('expiration_date'); // MM/YY
-            $table->string('cvv')->nullable(); // Should definitely NOT be stored in production usually
+            $table->string('card_number'); 
+            $table->string('expiration_date'); 
+            $table->string('cvv')->nullable();
             $table->boolean('is_default')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

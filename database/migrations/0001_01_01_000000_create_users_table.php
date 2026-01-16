@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone_number')->unique();
@@ -20,8 +21,10 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->integer('failed_login_attempts')->default(0);
             $table->dateTime('locked_until')->nullable();
+            $table->boolean('store_owner')->default(false);
             $table->string('type')->default('user');
             $table->rememberToken();
+            $table->timestamp('banned_until')->nullable();
             $table->timestamps();
         });
 

@@ -40,6 +40,7 @@ use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\Stores\StoreController;
 
 use App\Http\Controllers\Admin\Notifications\PushNotificationController;
+use App\Http\Controllers\Admin\AnalyticsController;
 
 Route::get('/', function () {
     notify()->success('Laravel Notify is awesome!');
@@ -76,6 +77,8 @@ Route::middleware('auth:web')->group(function () {
 
     //users
     Route::resource('users', UsersController::class);
+    Route::post('users/{uuid}/ban', [UsersController::class, 'ban'])->name('users.ban');
+    Route::post('users/{uuid}/unban', [UsersController::class, 'unban'])->name('users.unban');
 
     //stores
     Route::resource('stores', StoreController::class);
@@ -108,6 +111,15 @@ Route::middleware('auth:web')->group(function () {
     //notifications
     Route::resource('push-notifications', PushNotificationController::class);
     Route::post('push-notifications/{uuid}/send', [PushNotificationController::class, 'send'])->name('push-notifications.send');
+
+    //analytics
+    Route::prefix('analytics')->name('analytics.')->group(function () {
+        Route::get('general', [AnalyticsController::class, 'general'])->name('general');
+        Route::get('users', [AnalyticsController::class, 'user'])->name('users');
+        Route::get('announcements', [AnalyticsController::class, 'announcement'])->name('announcements');
+        Route::get('income', [AnalyticsController::class, 'income'])->name('income');
+        Route::get('activity', [AnalyticsController::class, 'activity'])->name('activity');
+    });
 
     Route::post('clear-cache', [DashboardController::class, 'clearCache'])->name('clear-cache');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

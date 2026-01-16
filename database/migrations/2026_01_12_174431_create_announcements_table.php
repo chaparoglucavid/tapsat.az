@@ -17,7 +17,8 @@ return new class extends Migration
             
             // Relations
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete(); // Validation levelinde yoxlanacaq ki, alt kategoriya olsun
+            $table->foreignId('store_id')->nullable()->constrained('stores')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();
             
             // Common Info

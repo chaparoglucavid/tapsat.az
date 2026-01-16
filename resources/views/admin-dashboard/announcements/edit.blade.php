@@ -173,19 +173,7 @@
     </div>
 @endsection
 
-@section('css-code')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" rel="stylesheet" />
-    <style>
-        .dropzone {
-            border: 2px dashed #d9dee3;
-            border-radius: 0.5rem;
-            background: #fdfdfd;
-        }
-    </style>
-@endsection
-
 @section('js-code')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     <script>
         Dropzone.autoDiscover = false;
         
@@ -193,6 +181,7 @@
         var myDropzone = new Dropzone("#document-dropzone", {
             url: '{{ route('media.upload') }}',
             maxFilesize: 5, // MB
+            acceptedFiles: 'image/*',
             addRemoveLinks: true,
             headers: {
                 'X-CSRF-TOKEN': "{{ csrf_token() }}"

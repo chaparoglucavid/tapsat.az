@@ -16,6 +16,13 @@ class UserCreditCardsController extends Controller
      */
     public function store(Request $request)
     {
+        // Pre-process card number to remove spaces
+        if ($request->has('card_number')) {
+            $request->merge([
+                'card_number' => str_replace(' ', '', $request->input('card_number'))
+            ]);
+        }
+
         $validated = $request->validate([
             'user_id' => 'required|exists:users,uuid', // Validate UUID instead of ID
             'card_holder_name' => 'required|string|max:255',
@@ -61,7 +68,20 @@ class UserCreditCardsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $card = UserCreditCard::findOrFail($id);
+        
+        $validated = $request->validate([
+            'is_active' => 'required|boolean'
+        ]);
+
+        $card->update(['is_active' => $validated['is_active']]);
+
+        $message = $validated['is_active'] 
+            ? t_db('general', 'credit_card_activated_successfully') 
+            : t_db('general', 'credit_card_deactivated_successfully');
+
+        notify()->success($message);
+        return back();
     }
 
     /**

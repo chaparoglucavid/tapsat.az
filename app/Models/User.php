@@ -42,6 +42,7 @@ class User extends Authenticatable
         'otp_expires_at',
         'failed_login_attempts',
         'locked_until',
+        'banned_until',
         'type',
         'store_owner'
     ];
@@ -66,7 +67,13 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'otp_expires_at' => 'datetime',
+            'banned_until' => 'datetime',
         ];
+    }
+
+    public function isBanned()
+    {
+        return $this->banned_until && $this->banned_until->isFuture();
     }
 
     public function creditCards()

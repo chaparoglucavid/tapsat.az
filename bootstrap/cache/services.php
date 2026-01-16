@@ -35,6 +35,7 @@
     31 => 'Spatie\\Permission\\PermissionServiceProvider',
     32 => 'Spatie\\Translatable\\TranslatableServiceProvider',
     33 => 'App\\Providers\\AppServiceProvider',
+    34 => 'PragmaRX\\Health\\ServiceProvider',
   ),
   'eager' => 
   array (
@@ -57,6 +58,7 @@
     16 => 'Spatie\\Permission\\PermissionServiceProvider',
     17 => 'Spatie\\Translatable\\TranslatableServiceProvider',
     18 => 'App\\Providers\\AppServiceProvider',
+    19 => 'PragmaRX\\Health\\ServiceProvider',
   ),
   'deferred' => 
   array (
