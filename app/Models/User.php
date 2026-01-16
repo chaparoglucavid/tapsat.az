@@ -9,10 +9,23 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Enums\UserType;
 
+use Illuminate\Support\Str;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->uuid)) {
+                $model->uuid = (string) Str::uuid();
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +33,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'uuid',
         'name',
         'email',
         'phone_number',
@@ -28,7 +42,8 @@ class User extends Authenticatable
         'otp_expires_at',
         'failed_login_attempts',
         'locked_until',
-        'type'
+        'type',
+        'store_owner'
     ];
 
     /**
@@ -67,6 +82,11 @@ class User extends Authenticatable
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function store()
+    {
+        return $this->hasOne(Store::class);
     }
 
     public function scopeIsUser($query)

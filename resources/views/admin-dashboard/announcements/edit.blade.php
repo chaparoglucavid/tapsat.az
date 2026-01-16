@@ -22,8 +22,46 @@
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <label class="form-label">{{ t_db('general', 'user') }}</label>
-                                    <input type="text" class="form-control" value="{{ $announcement->user->name }}" disabled>
+                                    <label class="form-label fw-bold d-block mb-3">{{ t_db('general', 'announcement_owner') }}</label>
+                                    
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-6">
+                                            <div class="form-check custom-option custom-option-icon">
+                                                <label class="form-check-label custom-option-content" for="owner_user">
+                                                    <span class="custom-option-body">
+                                                        <i class="bx bx-user mb-2 fs-3"></i>
+                                                        <span class="custom-option-title">{{ t_db('general', 'user') }}</span>
+                                                        <small>{{ t_db('general', 'select_existing_user') }}</small>
+                                                    </span>
+                                                    <input name="owner_type" class="form-check-input" type="radio" value="user" id="owner_user" disabled {{ !$announcement->store_id ? 'checked' : '' }} />
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-check custom-option custom-option-icon">
+                                                <label class="form-check-label custom-option-content" for="owner_store">
+                                                    <span class="custom-option-body">
+                                                        <i class="bx bx-store mb-2 fs-3"></i>
+                                                        <span class="custom-option-title">{{ t_db('general', 'store') }}</span>
+                                                        <small>{{ t_db('general', 'select_existing_store') }}</small>
+                                                    </span>
+                                                    <input name="owner_type" class="form-check-input" type="radio" value="store" id="owner_store" disabled {{ $announcement->store_id ? 'checked' : '' }} />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @if($announcement->store_id)
+                                        <div id="store_display">
+                                            <label class="form-label">{{ t_db('general', 'store') }}</label>
+                                            <input type="text" class="form-control" value="{{ $announcement->store->store_name ?? '-' }}" disabled>
+                                        </div>
+                                    @else
+                                        <div id="user_display">
+                                            <label class="form-label">{{ t_db('general', 'user') }}</label>
+                                            <input type="text" class="form-control" value="{{ $announcement->user->name ?? '-' }}" disabled>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">{{ t_db('general', 'category') }}</label>

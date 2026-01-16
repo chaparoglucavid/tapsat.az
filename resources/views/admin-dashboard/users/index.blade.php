@@ -28,13 +28,13 @@
                                 <td>{{ $user->phone_number }}</td>
                                 <td>{{ $user->created_at->format('d.m.Y H:i') }}</td>
                                 <td class="d-flex align-items-center">
-                                    <a href="{{ route('users.show', $user->id) }}" class="btn btn-icon item-edit" title="{{ t_db('general', 'show') }}">
+                                    <a href="{{ route('users.show', $user->uuid) }}" class="btn btn-icon item-edit" title="{{ t_db('general', 'show') }}">
                                         <i class="bx bx-show icon-sm"></i>
                                     </a>
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-icon item-edit" title="{{ t_db('general', 'edit') }}">
+                                    <a href="{{ route('users.edit', $user->uuid) }}" class="btn btn-icon item-edit" title="{{ t_db('general', 'edit') }}">
                                         <i class="bx bx-edit icon-sm"></i>
                                     </a>
-                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ t_db('general', 'are_you_sure') }}')">
+                                    <form action="{{ route('users.destroy', $user->uuid) }}" method="POST" onsubmit="return confirm('{{ t_db('general', 'are_you_sure') }}')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-icon item-trash text-danger" title="{{ t_db('general', 'delete') }}">

@@ -13,7 +13,7 @@
                         </a>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('users.update', $user->id) }}">
+                        <form method="POST" action="{{ route('users.update', $user->uuid) }}">
                             @csrf
                             @method('PUT')
                             <div class="mb-3">

@@ -108,8 +108,8 @@
                         <div data-i18n="Without menu">{{ t_db('general', 'users') }}</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('stores.*') ? 'active' : '' }}">
+                    <a href="{{ route('stores.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">{{ t_db('general', 'stores') }}</div>
                     </a>
                 </li>
@@ -303,8 +303,8 @@
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('push-notifications.*') ? 'active' : '' }}">
+                    <a href="{{ route('push-notifications.index') }}" class="menu-link">
                         <div data-i18n="Without menu">{{ t_db('general', 'push_notification_for_app') }}</div>
                     </a>
                 </li>

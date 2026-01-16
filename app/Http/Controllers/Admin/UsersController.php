@@ -21,27 +21,27 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $uuid)
     {
-        $user = User::with(['announcements', 'creditCards', 'payments'])->findOrFail($id);
+        $user = User::with(['announcements', 'creditCards', 'payments'])->where('uuid', $uuid)->firstOrFail();
         return view('admin-dashboard.users.show', compact('user'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $uuid)
     {
-        $user = User::findOrFail($id);
+        $user = User::where('uuid', $uuid)->firstOrFail();
         return view('admin-dashboard.users.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $uuid)
     {
-        $user = User::findOrFail($id);
+        $user = User::where('uuid', $uuid)->firstOrFail();
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -58,9 +58,9 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $uuid)
     {
-        $user = User::findOrFail($id);
+        $user = User::where('uuid', $uuid)->firstOrFail();
         $user->delete();
 
         notify()->success(t_db('general', 'user_deleted_successfully'));

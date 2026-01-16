@@ -41,7 +41,7 @@
                                 </li>
                             </ul>
                             <div class="d-flex justify-content-center pt-3">
-                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary me-3">{{ t_db('general', 'edit') }}</a>
+                                <a href="{{ route('users.edit', $user->uuid) }}" class="btn btn-primary me-3">{{ t_db('general', 'edit') }}</a>
                                 <a href="{{ route('users.index') }}" class="btn btn-label-secondary">{{ t_db('general', 'back') }}</a>
                             </div>
                         </div>
@@ -207,7 +207,7 @@
                     </div>
                     <form action="{{ route('user-credit-cards.store') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="user_id" value="{{ $user->id }}">
+                        <input type="hidden" name="user_id" value="{{ $user->uuid }}">
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col mb-3">

@@ -30,15 +30,58 @@
 
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <label class="form-label">{{ t_db('general', 'user') }}</label>
-                                    <select name="user_id" class="form-select select2" required>
-                                        <option value="">{{ t_db('general', 'select_user') }}</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                                {{ $user->name }} ({{ $user->email }})
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <label class="form-label fw-bold d-block mb-3">{{ t_db('general', 'announcement_owner') }}</label>
+                                    
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-6">
+                                            <div class="form-check custom-option custom-option-icon">
+                                                <label class="form-check-label custom-option-content" for="owner_user">
+                                                    <span class="custom-option-body">
+                                                        <i class="bx bx-user mb-2 fs-3"></i>
+                                                        <span class="custom-option-title">{{ t_db('general', 'user') }}</span>
+                                                        <small>{{ t_db('general', 'select_existing_user') }}</small>
+                                                    </span>
+                                                    <input name="owner_type" class="form-check-input" type="radio" value="user" id="owner_user" checked />
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-check custom-option custom-option-icon">
+                                                <label class="form-check-label custom-option-content" for="owner_store">
+                                                    <span class="custom-option-body">
+                                                        <i class="bx bx-store mb-2 fs-3"></i>
+                                                        <span class="custom-option-title">{{ t_db('general', 'store') }}</span>
+                                                        <small>{{ t_db('general', 'select_existing_store') }}</small>
+                                                    </span>
+                                                    <input name="owner_type" class="form-check-input" type="radio" value="store" id="owner_store" />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="user_select_container" class="animate__animated animate__fadeIn">
+                                        <label class="form-label">{{ t_db('general', 'select_user') }}</label>
+                                        <select name="user_id" class="form-select select2">
+                                            <option value="">{{ t_db('general', 'select_user') }}</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                                    {{ $user->name }} ({{ $user->email }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div id="store_select_container" class="d-none animate__animated animate__fadeIn">
+                                        <label class="form-label">{{ t_db('general', 'select_store') }}</label>
+                                        <select name="store_id" class="form-select select2">
+                                            <option value="">{{ t_db('general', 'select_store') }}</option>
+                                            @foreach($stores as $store)
+                                                <option value="{{ $store->id }}" {{ old('store_id') == $store->id ? 'selected' : '' }}>
+                                                    {{ $store->store_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">{{ t_db('general', 'category') }}</label>
@@ -151,9 +194,29 @@
 @section('js-code')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     <script>
-        Dropzone.autoDiscover = false;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle Owner Selection
+            const userRadio = document.getElementById('owner_user');
+            const storeRadio = document.getElementById('owner_store');
+            const userContainer = document.getElementById('user_select_container');
+            const storeContainer = document.getElementById('store_select_container');
+
+            function toggleOwnerSection() {
+                if (userRadio.checked) {
+                    userContainer.classList.remove('d-none');
+                    storeContainer.classList.add('d-none');
+                } else {
+                    userContainer.classList.add('d-none');
+                    storeContainer.classList.remove('d-none');
+                }
+            }
+
+            userRadio.addEventListener('change', toggleOwnerSection);
+            storeRadio.addEventListener('change', toggleOwnerSection);
+
+            Dropzone.autoDiscover = false;
         
-        var uploadedDocumentMap = {}
+            var uploadedDocumentMap = {}
         var myDropzone = new Dropzone("#document-dropzone", {
             url: "{{ route('media.upload') }}",
             maxFilesize: 5, // MB
@@ -197,5 +260,6 @@
                 @endif
             }
         });
+    });
     </script>
 @endsection

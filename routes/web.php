@@ -37,6 +37,9 @@ use App\Http\Controllers\Admin\Security\{
     IpRulesController
 };
 use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\Stores\StoreController;
+
+use App\Http\Controllers\Admin\Notifications\PushNotificationController;
 
 Route::get('/', function () {
     notify()->success('Laravel Notify is awesome!');
@@ -73,6 +76,10 @@ Route::middleware('auth:web')->group(function () {
 
     //users
     Route::resource('users', UsersController::class);
+
+    //stores
+    Route::resource('stores', StoreController::class);
+    Route::post('stores/{uuid}/status', [StoreController::class, 'updateStatus'])->name('stores.update-status');
     
     //user credit cards (nested or standalone, maybe standalone for now but linked)
     Route::resource('user-credit-cards', UserCreditCardsController::class);
@@ -97,6 +104,10 @@ Route::middleware('auth:web')->group(function () {
     Route::get('security/suspicious-activities', [SuspiciousActivitiesController::class, 'index'])
         ->name('security.suspicious-activities.index');
     Route::resource('ip-rules', IpRulesController::class)->except(['show']);
+
+    //notifications
+    Route::resource('push-notifications', PushNotificationController::class);
+    Route::post('push-notifications/{uuid}/send', [PushNotificationController::class, 'send'])->name('push-notifications.send');
 
     Route::post('clear-cache', [DashboardController::class, 'clearCache'])->name('clear-cache');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

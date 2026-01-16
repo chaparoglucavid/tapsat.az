@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\City;
 use App\Models\ComplaintSubject;
 use App\Models\Package;
+use App\Models\Store;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,8 +39,9 @@ class AnnouncementsController extends Controller
         $categories = Category::IsActive()->get();
         $cities = City::IsActive()->get();
         $users = User::IsUser()->get();
+        $stores = Store::Confirmed()->get();
         $packages = Package::IsActive()->get();
-        return view('admin-dashboard.announcements.create', compact('categories', 'cities', 'users', 'packages'));
+        return view('admin-dashboard.announcements.create', compact('categories', 'cities', 'users', 'stores', 'packages'));
     }
 
     /**
@@ -52,7 +54,9 @@ class AnnouncementsController extends Controller
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
             'city_id' => 'required|exists:cities,id',
-            'user_id' => 'required|exists:users,id',
+            'owner_type' => 'required|in:user,store',
+            'user_id' => 'required_if:owner_type,user|nullable|exists:users,id',
+            'store_id' => 'required_if:owner_type,store|nullable|exists:stores,id',
             'status' => ['required', new Enum(AnnouncementStatus::class)],
             'images' => 'nullable|array',
             'images.*' => 'string',
@@ -60,11 +64,21 @@ class AnnouncementsController extends Controller
             'packages.*' => 'exists:packages,id'
         ]);
 
+        // Determine user_id from store if owner_type is store
+        $userId = $validated['user_id'] ?? null;
+        $storeId = $validated['store_id'] ?? null;
+
+        if ($request->owner_type === 'store' && $storeId) {
+            $store = Store::find($storeId);
+            $userId = $store->user_id; // Store owner becomes the announcement owner
+        }
+
         // try {
             DB::beginTransaction();
             $announcement = Announcement::create([
                 'uuid' => Str::uuid(),
-                'user_id' => $validated['user_id'],
+                'user_id' => $userId,
+                'store_id' => $storeId,
                 'category_id' => $validated['category_id'],
                 'city_id' => $validated['city_id'],
                 'title' => NULL,
